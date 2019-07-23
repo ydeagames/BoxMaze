@@ -46,32 +46,33 @@ public class CubeBehaviour : MonoBehaviour
         if (isRotate)
             return;
 
+        var currentPoint = transform.localPosition;
         var nextPoint = Vector3.zero;
         var rotatePoint = Vector3.zero;
         var rotateAxis = Vector3.zero;
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            nextPoint = transform.position + new Vector3(cubeSize, 0f, 0f);
-            rotatePoint = transform.position + new Vector3(cubeSizeHalf, -cubeSizeHalf, 0f);
+            nextPoint = currentPoint + new Vector3(cubeSize, 0f, 0f);
+            rotatePoint = currentPoint + new Vector3(cubeSizeHalf, -cubeSizeHalf, 0f);
             rotateAxis = new Vector3(0, 0, -1);
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            nextPoint = transform.position + new Vector3(-cubeSize, 0f, 0f);
-            rotatePoint = transform.position + new Vector3(-cubeSizeHalf, -cubeSizeHalf, 0f);
+            nextPoint = currentPoint + new Vector3(-cubeSize, 0f, 0f);
+            rotatePoint = currentPoint + new Vector3(-cubeSizeHalf, -cubeSizeHalf, 0f);
             rotateAxis = new Vector3(0, 0, 1);
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            nextPoint = transform.position + new Vector3(0f, 0f, -cubeSize);
-            rotatePoint = transform.position + new Vector3(0f, -cubeSizeHalf, -cubeSizeHalf);
+            nextPoint = currentPoint + new Vector3(0f, 0f, -cubeSize);
+            rotatePoint = currentPoint + new Vector3(0f, -cubeSizeHalf, -cubeSizeHalf);
             rotateAxis = new Vector3(-1, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            nextPoint = transform.position + new Vector3(0f, 0f, cubeSize);
-            rotatePoint = transform.position + new Vector3(0f, -cubeSizeHalf, cubeSizeHalf);
+            nextPoint = currentPoint + new Vector3(0f, 0f, cubeSize);
+            rotatePoint = currentPoint + new Vector3(0f, -cubeSizeHalf, cubeSizeHalf);
             rotateAxis = new Vector3(1, 0, 0);
         }
 
@@ -88,7 +89,7 @@ public class CubeBehaviour : MonoBehaviour
             return;
         if (tile.tileId != GetSideId(nextRotation))
         {
-            //var currentPoint = transform.position;
+            //var currentPoint = currentPoint;
             //var currentPos = currentPoint.ToMazePos();
             //Debug.LogFormat("Cannot Move\n  Current(pos={0}, id={1}, rot={2})\n  Next(pos={3}, id={4}, rot={5})\n  CurrentTile(pos={6}, id={7})\n  NextTile(pos={8}, id={9})",
             //    currentPoint, GetSideId(transform.rotation), transform.rotation.eulerAngles,
@@ -117,7 +118,7 @@ public class CubeBehaviour : MonoBehaviour
             if (sumAngle > 90f)
                 cubeAngle -= sumAngle - 90f;
 
-            transform.RotateAround(rotatePoint, rotateAxis, cubeAngle);
+            transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), cubeAngle);
 
             yield return null;
         }

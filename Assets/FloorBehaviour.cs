@@ -75,7 +75,7 @@ public class FloorBehaviour : MonoBehaviour
             var gobj = Instantiate(tilePrefab, transform);
             tile = gobj.AddComponent<Tile>();
         }
-        tile.transform.position = new Vector3(x, 0, -y);
+        tile.transform.localPosition = new Vector3(x, 0, -y);
         tile.tileId = id;
         tile.tileMaterial = tileMaterials[tile.tileId];
         if (tiles.ContainsKey((x, y)))
