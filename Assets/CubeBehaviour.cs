@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CubeBehaviour : MonoBehaviour
 {
+    public Transform cameraWrapper;
+
     public float cubeAngle = 15f;   // ここを変えると回転速度が変わる
 
     float cubeSize = 1f;           // キューブの大きさ
@@ -49,29 +51,30 @@ public class CubeBehaviour : MonoBehaviour
         var rotatePoint = Vector3.zero;
         var rotateAxis = Vector3.zero;
 
+        Quaternion rot = Quaternion.Euler(0, Mathf.FloorToInt(cameraWrapper.localEulerAngles.y / 90) * 90, 0);
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            nextPoint = currentPoint + new Vector3(cubeSize, 0f, 0f);
-            rotatePoint = currentPoint + new Vector3(cubeSizeHalf, -cubeSizeHalf, 0f);
-            rotateAxis = new Vector3(0, 0, -1);
+            nextPoint = currentPoint + rot * new Vector3(cubeSize, 0f, 0f);
+            rotatePoint = currentPoint + rot * new Vector3(cubeSizeHalf, -cubeSizeHalf, 0f);
+            rotateAxis = rot * new Vector3(0, 0, -1);
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            nextPoint = currentPoint + new Vector3(-cubeSize, 0f, 0f);
-            rotatePoint = currentPoint + new Vector3(-cubeSizeHalf, -cubeSizeHalf, 0f);
-            rotateAxis = new Vector3(0, 0, 1);
+            nextPoint = currentPoint + rot * new Vector3(-cubeSize, 0f, 0f);
+            rotatePoint = currentPoint + rot * new Vector3(-cubeSizeHalf, -cubeSizeHalf, 0f);
+            rotateAxis = rot * new Vector3(0, 0, 1);
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            nextPoint = currentPoint + new Vector3(0f, 0f, -cubeSize);
-            rotatePoint = currentPoint + new Vector3(0f, -cubeSizeHalf, -cubeSizeHalf);
-            rotateAxis = new Vector3(-1, 0, 0);
+            nextPoint = currentPoint + rot * new Vector3(0f, 0f, -cubeSize);
+            rotatePoint = currentPoint + rot * new Vector3(0f, -cubeSizeHalf, -cubeSizeHalf);
+            rotateAxis = rot * new Vector3(-1, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            nextPoint = currentPoint + new Vector3(0f, 0f, cubeSize);
-            rotatePoint = currentPoint + new Vector3(0f, -cubeSizeHalf, cubeSizeHalf);
-            rotateAxis = new Vector3(1, 0, 0);
+            nextPoint = currentPoint + rot * new Vector3(0f, 0f, cubeSize);
+            rotatePoint = currentPoint + rot * new Vector3(0f, -cubeSizeHalf, cubeSizeHalf);
+            rotateAxis = rot * new Vector3(1, 0, 0);
         }
 
         // 入力がない時はコルーチンを呼び出さないようにする

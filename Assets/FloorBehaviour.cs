@@ -64,7 +64,7 @@ public class FloorBehaviour : MonoBehaviour
                 Create(pos.x, pos.y, id);
 
                 //Create(pos.x, pos.y, Random.Range(0, tileMaterials.Length));
-                yield return new WaitForSeconds(.1f);
+                //yield return new WaitForSeconds(.1f);
             }
         yield break;
     }
