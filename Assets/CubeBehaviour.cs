@@ -4,14 +4,35 @@ using UnityEngine;
 
 public class CubeBehaviour : MonoBehaviour
 {
-    Vector3 rotatePoint = Vector3.zero;  //回転の中心
-    Vector3 rotateAxis = Vector3.zero;   //回転軸
-    float cubeAngle = 0f;                //回転角度
-    Vector3 nextPoint = Vector3.zero;    //回転の中心
+    public float cubeAngle = 15f;   // ここを変えると回転速度が変わる
 
-    float cubeSize;                      //キューブの大きさ
-    float cubeSizeHalf;                  //キューブの大きさの半分
-    bool isRotate = false;               //回転中に立つフラグ。回転中は入力を受け付けない
+    float cubeSize;                    // キューブの大きさ
+    float cubeSizeHalf;                // キューブの大きさの半分
+    bool isRotate = false;            // 回転中に立つフラグ。回転中は入力を受け付けない
+
+    static Vector3[] sides =
+    {
+        Vector3.forward,
+        Vector3.back,
+        Vector3.up,
+        Vector3.right,
+        Vector3.down,
+        Vector3.left,
+    };
+    public static int GetSideId(Quaternion rotation)
+    {
+        (int, float)? min = null;
+
+        for (int i = 0; i  < sides.Length; i++)
+        {
+            var side = sides[i];
+            float dist = Vector3.Dot(Vector3.down, rotation * side);
+            if (!min.HasValue || dist < min.Value.Item2)
+                min = (i, dist);
+        }
+
+        return min?.Item1 ?? 0;
+    }
 
     void Start()
     {
@@ -25,39 +46,63 @@ public class CubeBehaviour : MonoBehaviour
         if (isRotate)
             return;
 
+        var nextPoint = Vector3.zero;
+        var rotatePoint = Vector3.zero;
+        var rotateAxis = Vector3.zero;
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             nextPoint = transform.position + new Vector3(cubeSize, 0f, 0f);
             rotatePoint = transform.position + new Vector3(cubeSizeHalf, -cubeSizeHalf, 0f);
             rotateAxis = new Vector3(0, 0, -1);
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             nextPoint = transform.position + new Vector3(-cubeSize, 0f, 0f);
             rotatePoint = transform.position + new Vector3(-cubeSizeHalf, -cubeSizeHalf, 0f);
             rotateAxis = new Vector3(0, 0, 1);
         }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            nextPoint = transform.position + new Vector3(0f, 0f, cubeSize);
-            rotatePoint = transform.position + new Vector3(0f, -cubeSizeHalf, cubeSizeHalf);
-            rotateAxis = new Vector3(1, 0, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             nextPoint = transform.position + new Vector3(0f, 0f, -cubeSize);
             rotatePoint = transform.position + new Vector3(0f, -cubeSizeHalf, -cubeSizeHalf);
             rotateAxis = new Vector3(-1, 0, 0);
         }
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            nextPoint = transform.position + new Vector3(0f, 0f, cubeSize);
+            rotatePoint = transform.position + new Vector3(0f, -cubeSizeHalf, cubeSizeHalf);
+            rotateAxis = new Vector3(1, 0, 0);
+        }
+
         // 入力がない時はコルーチンを呼び出さないようにする
         if (rotatePoint == Vector3.zero)
             return;
-        if (FloorBehaviour.GetInstance().Get((int)nextPoint.x, (int)nextPoint.z) == null)
+
+        var nextRotation = Quaternion.AngleAxis(90, rotateAxis) * transform.rotation;
+        var nextPos = nextPoint.ToMazePos();
+
+        // いけるかどうか
+        var tile = FloorBehaviour.GetInstance().Get(nextPos.x, nextPos.y);
+        if (tile == null)
             return;
-        StartCoroutine(MoveCube());
+        if (tile.tileId != GetSideId(nextRotation))
+        {
+            //var currentPoint = transform.position;
+            //var currentPos = currentPoint.ToMazePos();
+            //Debug.LogFormat("Cannot Move\n  Current(pos={0}, id={1}, rot={2})\n  Next(pos={3}, id={4}, rot={5})\n  CurrentTile(pos={6}, id={7})\n  NextTile(pos={8}, id={9})",
+            //    currentPoint, GetSideId(transform.rotation), transform.rotation.eulerAngles,
+            //    nextPoint, GetSideId(nextRotation), nextRotation.eulerAngles,
+            //    currentPos, FloorBehaviour.GetInstance().Get(currentPos.x, currentPos.y).tileId,
+            //    nextPos, tile.tileId);
+
+            return;
+        }
+
+        StartCoroutine(MoveCube(rotatePoint, rotateAxis));
     }
 
-    IEnumerator MoveCube()
+    IEnumerator MoveCube(Vector3 rotatePoint, Vector3 rotateAxis)
     {
         //回転中のフラグを立てる
         isRotate = true;
@@ -66,14 +111,12 @@ public class CubeBehaviour : MonoBehaviour
         float sumAngle = 0f; //angleの合計を保存
         while (sumAngle < 90f)
         {
-            cubeAngle = 15f; //ここを変えると回転速度が変わる
             sumAngle += cubeAngle;
 
             // 90度以上回転しないように値を制限
             if (sumAngle > 90f)
-            {
                 cubeAngle -= sumAngle - 90f;
-            }
+
             transform.RotateAround(rotatePoint, rotateAxis, cubeAngle);
 
             yield return null;
@@ -81,8 +124,6 @@ public class CubeBehaviour : MonoBehaviour
 
         //回転中のフラグを倒す
         isRotate = false;
-        rotatePoint = Vector3.zero;
-        rotateAxis = Vector3.zero;
 
         yield break;
     }
