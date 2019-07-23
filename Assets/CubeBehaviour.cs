@@ -6,9 +6,9 @@ public class CubeBehaviour : MonoBehaviour
 {
     public float cubeAngle = 15f;   // ここを変えると回転速度が変わる
 
-    float cubeSize;                    // キューブの大きさ
-    float cubeSizeHalf;                // キューブの大きさの半分
-    bool isRotate = false;            // 回転中に立つフラグ。回転中は入力を受け付けない
+    float cubeSize = 1f;           // キューブの大きさ
+    float cubeSizeHalf = .5f;       // キューブの大きさの半分
+    bool isRotate = false;          // 回転中に立つフラグ。回転中は入力を受け付けない
 
     static Vector3[] sides =
     {
@@ -36,8 +36,6 @@ public class CubeBehaviour : MonoBehaviour
 
     void Start()
     {
-        cubeSize = transform.localScale.x;
-        cubeSizeHalf = transform.localScale.x / 2f;
     }
 
     void Update()

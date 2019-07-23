@@ -5,18 +5,20 @@ using UnityEngine;
 public class FloorBehaviour : MonoBehaviour
 {
     public GameObject tilePrefab;
+    public Vector2Int size = new Vector2Int(10, 10);
     public Material[] tileMaterials;
     public Dictionary<(int x, int y), Tile> tiles = new Dictionary<(int x, int y), Tile>();
 
     // Start is called before the first frame update
     void Start()
     {
+        transform.parent.localPosition += new Vector3(-size.x / 2 + .5f, 0, -(-size.y / 2 + .5f));
         StartCoroutine(Generate());
     }
 
     IEnumerator Generate()
     {
-        var maze = new Maze(10, 10);
+        var maze = new Maze(size.x, size.y);
         maze.DebugPrint();
         var routes = maze.GetRoutes();
         Dictionary<Vector2Int, Quaternion> rotMap = new Dictionary<Vector2Int, Quaternion>();
