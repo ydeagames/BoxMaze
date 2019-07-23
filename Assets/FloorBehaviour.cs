@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class FloorBehaviour : MonoBehaviour
 {
     public GameObject tilePrefab;
+    public GameObject flagStartPrefab;
+    public GameObject flagEndPrefab;
     public Vector2Int size = new Vector2Int(10, 10);
     public Material[] tileMaterials;
     public Dictionary<(int x, int y), Tile> tiles = new Dictionary<(int x, int y), Tile>();
+    public CubeBehaviour player;
 
     // Start is called before the first frame update
     void Start()
@@ -18,9 +22,33 @@ public class FloorBehaviour : MonoBehaviour
 
     IEnumerator Generate()
     {
-        var maze = new Maze(size.x, size.y);
+        var start = new Maze.Cell() { IX = Random.Range(1, size.x), IY = Random.Range(1, size.y) };
+        var playerpos = new Vector2Int(start.IX, start.IY).ToWorldPos(); ;
+        player.transform.localPosition = playerpos + new Vector3(0, .5f, 0);
+        var flagStart = Instantiate(flagStartPrefab, transform.parent);
+        flagStart.transform.localPosition = playerpos;
+
+        var maze = new Maze(new Maze.Cell() { IX = size.x, IY = size.y }, start);
         maze.DebugPrint();
         var routes = maze.GetRoutes();
+
+        Maze.RouteNode? longest = null;
+        foreach (var route in routes)
+            if (route.Count > 0)
+            {
+                var last = route.Last();
+                if (!longest.HasValue || last.pos.Count > longest.Value.pos.Count)
+                    longest = last;
+            }
+        if (longest.HasValue)
+        {
+            Debug.LogFormat("Longest is ({0},{1}), Count={2}", longest.Value.pos.IX, longest.Value.pos.IY, longest.Value.pos.Count);
+
+            var goalpos = new Vector2Int(longest.Value.pos.IX, longest.Value.pos.IY).ToWorldPos();
+            var flagEnd = Instantiate(flagStartPrefab, transform.parent);
+            flagEnd.transform.localPosition = goalpos;
+        }
+
         Dictionary<Vector2Int, Quaternion> rotMap = new Dictionary<Vector2Int, Quaternion>();
         foreach (var route in routes)
             foreach (var node in route)
@@ -64,7 +92,7 @@ public class FloorBehaviour : MonoBehaviour
                 Create(pos.x, pos.y, id);
 
                 //Create(pos.x, pos.y, Random.Range(0, tileMaterials.Length));
-                //yield return new WaitForSeconds(.1f);
+                yield return new WaitForSeconds(.01f);
             }
         yield break;
     }

@@ -328,6 +328,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 2606612831198090909, guid: 491e5d066a770c0408b239f32ac630d6,
     type: 3}
+  flagStartPrefab: {fileID: 1681739756088032529, guid: 5ac4665012e52404e9383a78fcb24bf5,
+    type: 3}
+  flagEndPrefab: {fileID: 1681739756088032529, guid: 5ac4665012e52404e9383a78fcb24bf5,
+    type: 3}
   size: {x: 10, y: 10}
   tileMaterials:
   - {fileID: 2100000, guid: eb05324e17c81774d907803caae9fcb0, type: 2}
@@ -336,6 +340,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 91d3fcbd5754eb24ab3cca45b6f9ad60, type: 2}
   - {fileID: 2100000, guid: 91079ea160c28a0489061b899e5f1e50, type: 2}
   - {fileID: 2100000, guid: f2825092ab739214d933f2d237529f97, type: 2}
+  player: {fileID: 1806161336}
 --- !u!4 &540232938
 Transform:
   m_ObjectHideFlags: 0

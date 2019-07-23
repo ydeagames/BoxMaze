@@ -20,10 +20,10 @@ public class Maze
     private List<Cell> StartCells;
 
     // コンストラクタ
-    public Maze(int width, int height)
+    public Maze(Cell size, Cell start)
     {
-        width = width * 2 + 1;
-        height = height * 2 + 1;
+        var width = size.X;
+        var height = size.Y;
         // 5未満のサイズや偶数では生成できない
         if (width < 5 || height < 5) throw new ArgumentOutOfRangeException();
         if (width % 2 == 0) width++;
@@ -37,7 +37,7 @@ public class Maze
         Routes = new List<List<RouteNode>>();
         Routes.Add(new List<RouteNode>());
 
-        CreateMaze();
+        CreateMaze(start);
     }
 
     public int[,] GetMaze()
@@ -51,7 +51,7 @@ public class Maze
     }
 
     // 生成処理
-    private void CreateMaze()
+    private void CreateMaze(Cell start)
     {
         // 全てを壁で埋める
         // 穴掘り開始候補(x,yともに偶数)座標を保持しておく
@@ -71,8 +71,8 @@ public class Maze
         }
 
         // 穴掘り開始
-        Routes.Last().Add(new RouteNode() { pos = new Cell() { X = 1, Y = 1 } });
-        Dig(1, 1);
+        Routes.Last().Add(new RouteNode() { pos = start });
+        Dig(start.X, start.Y, 0);
 
         // 外壁を戻す
         for (int y = 0; y < this.Height; y++)
@@ -88,7 +88,7 @@ public class Maze
     }
 
     // 座標(x, y)に穴を掘る
-    private void Dig(int x, int y)
+    private void Dig(int x, int y, int count)
     {
         // 指定座標から掘れなくなるまで堀り続ける
         var rnd = new Random();
@@ -96,44 +96,51 @@ public class Maze
         {
             // 掘り進めることができる方向のリストを作成
             var directions = new List<Direction>();
-            if (this.Data[x, y - 1] == Wall && this.Data[x, y - 2] == Wall)
-                directions.Add(Direction.Up);
-            if (this.Data[x + 1, y] == Wall && this.Data[x + 2, y] == Wall)
-                directions.Add(Direction.Right);
-            if (this.Data[x, y + 1] == Wall && this.Data[x, y + 2] == Wall)
-                directions.Add(Direction.Down);
-            if (this.Data[x - 1, y] == Wall && this.Data[x - 2, y] == Wall)
-                directions.Add(Direction.Left);
+            try
+            {
+                if (this.Data[x, y - 1] == Wall && this.Data[x, y - 2] == Wall)
+                    directions.Add(Direction.Up);
+                if (this.Data[x + 1, y] == Wall && this.Data[x + 2, y] == Wall)
+                    directions.Add(Direction.Right);
+                if (this.Data[x, y + 1] == Wall && this.Data[x, y + 2] == Wall)
+                    directions.Add(Direction.Down);
+                if (this.Data[x - 1, y] == Wall && this.Data[x - 2, y] == Wall)
+                    directions.Add(Direction.Left);
+            }
+            catch(IndexOutOfRangeException e)
+            {
+                UnityEngine.Debug.LogFormat("ERROR {0}", e);
+            }
 
             // 掘り進められない場合、ループを抜ける
             if (directions.Count == 0) break;
 
-            int bx = x, by = y;
+            int bx = x, by = y, bcount = count;
             // 指定座標を通路とし穴掘り候補座標から削除
-            SetPath(x, y);
+            SetPath(x, y, count);
             // 掘り進められる場合はランダムに方向を決めて掘り進める
             var dirIndex = rnd.Next(directions.Count);
             // 決まった方向に先2マス分を通路とする
             switch (directions[dirIndex])
             {
                 case Direction.Up:
-                    SetPath(x, --y);
-                    SetPath(x, --y);
+                    SetPath(x, --y, ++count);
+                    SetPath(x, --y, ++count);
                     break;
                 case Direction.Right:
-                    SetPath(++x, y);
-                    SetPath(++x, y);
+                    SetPath(++x, y, ++count);
+                    SetPath(++x, y, ++count);
                     break;
                 case Direction.Down:
-                    SetPath(x, ++y);
-                    SetPath(x, ++y);
+                    SetPath(x, ++y, ++count);
+                    SetPath(x, ++y, ++count);
                     break;
                 case Direction.Left:
-                    SetPath(--x, y);
-                    SetPath(--x, y);
+                    SetPath(--x, y, ++count);
+                    SetPath(--x, y, ++count);
                     break;
             }
-            Routes.Last().Add(new RouteNode() { pos = new Cell() { X = x, Y = y }, before = new Cell() { X = bx, Y = by } });
+            Routes.Last().Add(new RouteNode() { pos = new Cell() { X = x, Y = y, Count = count }, before = new Cell() { X = bx, Y = by, Count = bcount } });
         }
 
         // どこにも掘り進められない場合、穴掘り開始候補座標から掘りなおし
@@ -143,18 +150,18 @@ public class Maze
         {
             if (Routes.Last().Count > 0)
                 Routes.Add(new List<RouteNode>());
-            Dig(cell.X, cell.Y);
+            Dig(cell.X, cell.Y, cell.Count);
         }
     }
 
     // 座標を通路とする(穴掘り開始座標候補の場合は保持)
-    private void SetPath(int x, int y)
+    private void SetPath(int x, int y, int count)
     {
         this.Data[x, y] = Path;
         if (x % 2 == 1 && y % 2 == 1)
         {
             // 穴掘り候補座標
-            StartCells.Add(new Cell() { X = x, Y = y });
+            StartCells.Add(new Cell() { X = x, Y = y, Count = count });
         }
     }
 
@@ -196,6 +203,7 @@ public class Maze
     // セル情報
     public class Cell
     {
+        public int Count { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
         public int IX
