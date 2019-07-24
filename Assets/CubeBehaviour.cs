@@ -25,7 +25,7 @@ public class CubeBehaviour : MonoBehaviour
     {
         (int, float)? min = null;
 
-        for (int i = 0; i  < sides.Length; i++)
+        for (int i = 0; i < sides.Length; i++)
         {
             var side = sides[i];
             float dist = Vector3.Dot(Vector3.down, rotation * side);
@@ -36,11 +36,43 @@ public class CubeBehaviour : MonoBehaviour
         return min?.Item1 ?? 0;
     }
 
+    public static Quaternion GetMoveRotation(Maze.Direction? direction, Quaternion rotation)
+    {
+        if (direction.HasValue)
+            switch (direction.Value)
+            {
+                case Maze.Direction.Right:
+                    {
+                        var axis = new Vector3(0, 0, -1);
+                        return Quaternion.AngleAxis(90, axis) * rotation;
+                    }
+
+                case Maze.Direction.Left:
+                    {
+                        var axis = new Vector3(0, 0, 1);
+                        return Quaternion.AngleAxis(90, axis) * rotation;
+                    }
+
+                case Maze.Direction.Down:
+                    {
+                        var axis = new Vector3(-1, 0, 0);
+                        return Quaternion.AngleAxis(90, axis) * rotation;
+                    }
+
+                case Maze.Direction.Up:
+                    {
+                        var axis = new Vector3(1, 0, 0);
+                        return Quaternion.AngleAxis(90, axis) * rotation;
+                    }
+            }
+        return rotation;
+    }
+
     void Start()
     {
     }
 
-    void Update()
+    public void Move(Maze.Direction direction, Quaternion rot)
     {
         //回転中は入力を受け付けない
         if (isRotate)
@@ -51,37 +83,46 @@ public class CubeBehaviour : MonoBehaviour
         var rotatePoint = Vector3.zero;
         var rotateAxis = Vector3.zero;
 
-        Quaternion rot = Quaternion.Euler(0, Mathf.FloorToInt(cameraWrapper.localEulerAngles.y / 90) * 90, 0);
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        switch (direction)
         {
-            nextPoint = currentPoint + rot * new Vector3(cubeSize, 0f, 0f);
-            rotatePoint = currentPoint + rot * new Vector3(cubeSizeHalf, -cubeSizeHalf, 0f);
-            rotateAxis = rot * new Vector3(0, 0, -1);
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            nextPoint = currentPoint + rot * new Vector3(-cubeSize, 0f, 0f);
-            rotatePoint = currentPoint + rot * new Vector3(-cubeSizeHalf, -cubeSizeHalf, 0f);
-            rotateAxis = rot * new Vector3(0, 0, 1);
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            nextPoint = currentPoint + rot * new Vector3(0f, 0f, -cubeSize);
-            rotatePoint = currentPoint + rot * new Vector3(0f, -cubeSizeHalf, -cubeSizeHalf);
-            rotateAxis = rot * new Vector3(-1, 0, 0);
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            nextPoint = currentPoint + rot * new Vector3(0f, 0f, cubeSize);
-            rotatePoint = currentPoint + rot * new Vector3(0f, -cubeSizeHalf, cubeSizeHalf);
-            rotateAxis = rot * new Vector3(1, 0, 0);
+            case Maze.Direction.Right:
+                {
+                    nextPoint = currentPoint + rot * new Vector3(cubeSize, 0f, 0f);
+                    rotatePoint = currentPoint + rot * new Vector3(cubeSizeHalf, -cubeSizeHalf, 0f);
+                    rotateAxis = rot * new Vector3(0, 0, -1);
+                }
+                break;
+
+            case Maze.Direction.Left:
+                {
+                    nextPoint = currentPoint + rot * new Vector3(-cubeSize, 0f, 0f);
+                    rotatePoint = currentPoint + rot * new Vector3(-cubeSizeHalf, -cubeSizeHalf, 0f);
+                    rotateAxis = rot * new Vector3(0, 0, 1);
+                }
+                break;
+
+            case Maze.Direction.Down:
+                {
+                    nextPoint = currentPoint + rot * new Vector3(0f, 0f, -cubeSize);
+                    rotatePoint = currentPoint + rot * new Vector3(0f, -cubeSizeHalf, -cubeSizeHalf);
+                    rotateAxis = rot * new Vector3(-1, 0, 0);
+                }
+                break;
+
+            case Maze.Direction.Up:
+                {
+                    nextPoint = currentPoint + rot * new Vector3(0f, 0f, cubeSize);
+                    rotatePoint = currentPoint + rot * new Vector3(0f, -cubeSizeHalf, cubeSizeHalf);
+                    rotateAxis = rot * new Vector3(1, 0, 0);
+                }
+                break;
         }
 
         // 入力がない時はコルーチンを呼び出さないようにする
         if (rotatePoint == Vector3.zero)
             return;
 
-        var nextRotation = Quaternion.AngleAxis(90, rotateAxis) * transform.rotation;
+        var nextRotation = Quaternion.AngleAxis(90, rotateAxis) * transform.localRotation;
         var nextPos = nextPoint.ToMazePos();
 
         // いけるかどうか
@@ -93,7 +134,7 @@ public class CubeBehaviour : MonoBehaviour
             //var currentPoint = currentPoint;
             //var currentPos = currentPoint.ToMazePos();
             //Debug.LogFormat("Cannot Move\n  Current(pos={0}, id={1}, rot={2})\n  Next(pos={3}, id={4}, rot={5})\n  CurrentTile(pos={6}, id={7})\n  NextTile(pos={8}, id={9})",
-            //    currentPoint, GetSideId(transform.rotation), transform.rotation.eulerAngles,
+            //    currentPoint, GetSideId(transform.localRotation), transform.localRotation.eulerAngles,
             //    nextPoint, GetSideId(nextRotation), nextRotation.eulerAngles,
             //    currentPos, FloorBehaviour.GetInstance().Get(currentPos.x, currentPos.y).tileId,
             //    nextPos, tile.tileId);
@@ -102,6 +143,27 @@ public class CubeBehaviour : MonoBehaviour
         }
 
         StartCoroutine(MoveCube(rotatePoint, rotateAxis));
+    }
+
+    public Vector2Int GetCurrentPos()
+    {
+        return transform.localPosition.ToMazePos();
+    }
+
+    void Update()
+    {
+        Quaternion rot = Quaternion.Euler(0, Mathf.FloorToInt(cameraWrapper.localEulerAngles.y / 90) * 90, 0);
+        Maze.Direction? direction = null;
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            direction = Maze.Direction.Right;
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            direction = Maze.Direction.Left;
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+            direction = Maze.Direction.Down;
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+            direction = Maze.Direction.Up;
+        if (direction.HasValue)
+            Move(direction.Value, rot);
     }
 
     IEnumerator MoveCube(Vector3 rotatePoint, Vector3 rotateAxis)

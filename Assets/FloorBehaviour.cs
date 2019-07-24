@@ -64,26 +64,7 @@ public class FloorBehaviour : MonoBehaviour
                 var pos = new Vector2Int(node.pos.IX, node.pos.IY);
 
                 var move = before.HasValue ? pos - before.Value : Vector2Int.zero;
-                if (move.x == 1)
-                {
-                    var axis = new Vector3(0, 0, -1);
-                    rotation = Quaternion.AngleAxis(90, axis) * rotation;
-                }
-                else if (move.x == -1)
-                {
-                    var axis = new Vector3(0, 0, 1);
-                    rotation = Quaternion.AngleAxis(90, axis) * rotation;
-                }
-                else if (move.y == 1)
-                {
-                    var axis = new Vector3(-1, 0, 0);
-                    rotation = Quaternion.AngleAxis(90, axis) * rotation;
-                }
-                else if (move.y == -1)
-                {
-                    var axis = new Vector3(1, 0, 0);
-                    rotation = Quaternion.AngleAxis(90, axis) * rotation;
-                }
+                rotation = CubeBehaviour.GetMoveRotation(move.ToDirection(), rotation);
                 //else
                 //    Debug.LogFormat("Not Move Route move={0}, pos={1}", move, pos);
                 int id = CubeBehaviour.GetSideId(rotation);
@@ -97,6 +78,11 @@ public class FloorBehaviour : MonoBehaviour
         yield break;
     }
 
+    public Material GetTileMaterial(int id)
+    {
+        return tileMaterials[id];
+    }
+
     public Tile Create(int x, int y, int id)
     {
         var tile = Get(x, y);
@@ -107,7 +93,7 @@ public class FloorBehaviour : MonoBehaviour
         }
         tile.transform.localPosition = new Vector3(x, 0, -y);
         tile.tileId = id;
-        tile.tileMaterial = tileMaterials[tile.tileId];
+        tile.tileMaterial = GetTileMaterial(tile.tileId);
         if (tiles.ContainsKey((x, y)))
             Debug.LogFormat("Duplicate Pos ({0}, {1})", x, y);
         tiles[(x, y)] = tile;

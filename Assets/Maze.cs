@@ -231,7 +231,7 @@ public class Maze
     }
 
     // 方向
-    private enum Direction
+    public enum Direction
     {
         Up = 0,
         Right = 1,
