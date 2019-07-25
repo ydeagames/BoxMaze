@@ -45,7 +45,7 @@ public class FloorBehaviour : MonoBehaviour
             Debug.LogFormat("Longest is ({0},{1}), Count={2}", longest.Value.pos.IX, longest.Value.pos.IY, longest.Value.pos.Count);
 
             var goalpos = new Vector2Int(longest.Value.pos.IX, longest.Value.pos.IY).ToWorldPos();
-            var flagEnd = Instantiate(flagStartPrefab, transform.parent);
+            var flagEnd = Instantiate(flagEndPrefab, transform.parent);
             flagEnd.transform.localPosition = goalpos;
         }
 
