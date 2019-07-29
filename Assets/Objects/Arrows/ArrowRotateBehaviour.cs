@@ -20,7 +20,7 @@ public class ArrowRotateBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var tileId = CubeBehaviour.GetSideId(CubeBehaviour.GetMoveRotation(direction, Quaternion.Inverse(controller.player.cameraWrapper.transform.localRotation)));
+        var tileId = CubeBehaviour.GetSideId(CubeBehaviour.GetMoveRotation(direction, Quaternion.Inverse(controller.player.cameraWrapper.transform.localRotation) * controller.player.transform.localRotation));
         arrowColor.material.color = FloorBehaviour.GetInstance().faces.GetFace(tileId).color;
 
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))

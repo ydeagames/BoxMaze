@@ -1403,7 +1403,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraWrapper: {fileID: 1000766852}
-  CubeAngle: 15
+  CubeAngle: 0
+  CubeAcc: 1
+  UnableCubeAngle: 15
   UnableCubeAcc: 2
 --- !u!4 &1806161340
 Transform:

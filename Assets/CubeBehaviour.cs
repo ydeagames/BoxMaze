@@ -7,9 +7,11 @@ public class CubeBehaviour : MonoBehaviour
     public Transform cameraWrapper;
 
     public float CubeAngle = 15f;   // ここを変えると回転速度が変わる
+    public float CubeAcc = 1f;      // ここを変えると回転速度が変わる
+    public float UnableCubeAngle = 15f;   // ここを変えると回転速度が変わる
     public float UnableCubeAcc = 1f;   // ここを変えると回転速度が変わる
 
-    float cubeSize = 1f;           // キューブの大きさ
+    float cubeSize = 1f;            // キューブの大きさ
     float cubeSizeHalf = .5f;       // キューブの大きさの半分
     bool isRotate = false;          // 回転中に立つフラグ。回転中は入力を受け付けない
 
@@ -142,7 +144,7 @@ public class CubeBehaviour : MonoBehaviour
             var tileId = CubeBehaviour.GetSideId(CubeBehaviour.GetMoveRotation(direction, transform.localRotation));
             StartCoroutine(UnableMove(rotatePoint, rotateAxis, new ChangeColor[]
             {
-                (Color diffuse, Color emission)=> { tile.material.color = diffuse; tile.material.SetColor("_EmissionColor", emission); },
+                (Color diffuse, Color emission)=> { if (tile != null) { tile.material.color = diffuse; tile.material.SetColor("_EmissionColor", emission); } },
                 (Color diffuse, Color emission)=> { modelRenderer.materials[tileId].color = diffuse; modelRenderer.materials[tileId].SetColor("_EmissionColor", emission); },
             }));
         }
@@ -220,11 +222,11 @@ public class CubeBehaviour : MonoBehaviour
 
         //回転処理
         float prog = 0f;
-        float vel = CubeAngle;
+        float vel = UnableCubeAngle;
         float pos = 0f;
         for (; vel > 0 || pos > 0f; vel -= UnableCubeAcc, pos += vel, prog += .5f)
         {
-            transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), vel);
+            transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), vel * 60 * Time.deltaTime);
 
             //var p = (Mathf.Sin(prog) + 1) / 2;
             //var diffuse = new Color(1, p, p);
@@ -253,17 +255,18 @@ public class CubeBehaviour : MonoBehaviour
         isRotate = true;
 
         //回転処理
-        float cubeAngle = CubeAngle;
-        float sumAngle = 0f; //angleの合計を保存
-        while (sumAngle < 90f)
+        float vel = CubeAngle;
+        float pos = 0f; //angleの合計を保存
+        while (pos < 90f)
         {
-            sumAngle += cubeAngle;
+            vel += CubeAcc;
+            pos += vel * 60 * Time.deltaTime;
 
             // 90度以上回転しないように値を制限
-            if (sumAngle > 90f)
-                cubeAngle -= sumAngle - 90f;
+            if (pos > 90f)
+                vel -= pos - 90f;
 
-            transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), cubeAngle);
+            transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), vel * 60 * Time.deltaTime);
 
             yield return null;
         }
