@@ -561,13 +561,7 @@ MonoBehaviour:
   flagEndPrefab: {fileID: 1681739756088032529, guid: 5ac4665012e52404e9383a78fcb24bf5,
     type: 3}
   size: {x: 10, y: 10}
-  tileMaterials:
-  - {fileID: 2100000, guid: eb05324e17c81774d907803caae9fcb0, type: 2}
-  - {fileID: 2100000, guid: 4bcdc1eeda6bf134395b8561952e90b8, type: 2}
-  - {fileID: 2100000, guid: 359af6cd062432642a6211ec1f8cf0b5, type: 2}
-  - {fileID: 2100000, guid: 91d3fcbd5754eb24ab3cca45b6f9ad60, type: 2}
-  - {fileID: 2100000, guid: 91079ea160c28a0489061b899e5f1e50, type: 2}
-  - {fileID: 2100000, guid: f2825092ab739214d933f2d237529f97, type: 2}
+  faces: {fileID: 11400000, guid: b2697eb40d56fd84ba290be2bfaf047a, type: 2}
   player: {fileID: 1806161336}
 --- !u!4 &540232938
 Transform:
@@ -1473,7 +1467,7 @@ PrefabInstance:
     - target: {fileID: 2300000, guid: c2eaf923a3f373f43815480c492b65cf, type: 3}
       propertyPath: m_Materials.Array.data[4]
       value: 
-      objectReference: {fileID: 2100000, guid: 91079ea160c28a0489061b899e5f1e50, type: 2}
+      objectReference: {fileID: 2100000, guid: 91d3fcbd5754eb24ab3cca45b6f9ad60, type: 2}
     - target: {fileID: 2300000, guid: c2eaf923a3f373f43815480c492b65cf, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1489,7 +1483,7 @@ PrefabInstance:
     - target: {fileID: 2300000, guid: c2eaf923a3f373f43815480c492b65cf, type: 3}
       propertyPath: m_Materials.Array.data[3]
       value: 
-      objectReference: {fileID: 2100000, guid: 91d3fcbd5754eb24ab3cca45b6f9ad60, type: 2}
+      objectReference: {fileID: 2100000, guid: 91079ea160c28a0489061b899e5f1e50, type: 2}
     - target: {fileID: 2300000, guid: c2eaf923a3f373f43815480c492b65cf, type: 3}
       propertyPath: m_Materials.Array.data[5]
       value: 

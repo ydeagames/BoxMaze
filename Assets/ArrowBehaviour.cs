@@ -20,7 +20,7 @@ public class ArrowBehaviour : MonoBehaviour
     void Update()
     {
         var tileId = CubeBehaviour.GetSideId(CubeBehaviour.GetMoveRotation(direction, controller.player.transform.localRotation));
-        arrowColor.material = FloorBehaviour.GetInstance().GetTileMaterial(tileId);
+        arrowColor.material.color = FloorBehaviour.GetInstance().faces.GetFace(tileId).color;
 
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
             if (hit.collider == col)

@@ -9,7 +9,7 @@ public class FloorBehaviour : MonoBehaviour
     public GameObject flagStartPrefab;
     public GameObject flagEndPrefab;
     public Vector2Int size = new Vector2Int(10, 10);
-    public Material[] tileMaterials;
+    public Faces faces;
     public Dictionary<(int x, int y), Tile> tiles = new Dictionary<(int x, int y), Tile>();
     public CubeBehaviour player;
 
@@ -78,11 +78,6 @@ public class FloorBehaviour : MonoBehaviour
         yield break;
     }
 
-    public Material GetTileMaterial(int id)
-    {
-        return tileMaterials[id];
-    }
-
     public Tile Create(int x, int y, int id)
     {
         var tile = Get(x, y);
@@ -93,7 +88,7 @@ public class FloorBehaviour : MonoBehaviour
         }
         tile.transform.localPosition = new Vector3(x, 0, -y);
         tile.tileId = id;
-        tile.tileMaterial = GetTileMaterial(tile.tileId);
+        tile.tileMaterial = faces.GetFace(tile.tileId).material;
         if (tiles.ContainsKey((x, y)))
             Debug.LogFormat("Duplicate Pos ({0}, {1})", x, y);
         tiles[(x, y)] = tile;
