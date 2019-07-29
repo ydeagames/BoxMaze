@@ -46,9 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
-  arrowColor: {fileID: 7434426160063873780}
+  arrowColor: {fileID: 6404428928715827398}
   direction: 0
-  offset: {x: 0, y: 0}
 --- !u!65 &188972991551934983
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -137,9 +136,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7623724708678293741}
   m_PrefabAsset: {fileID: 0}
---- !u!212 &7434426160063873780 stripped
+--- !u!212 &6404428928715827398 stripped
 SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 1072008508298877465, guid: c5df46dc7507cbf45b95deb67135d1de,
+  m_CorrespondingSourceObject: {fileID: 3543755763051982891, guid: c5df46dc7507cbf45b95deb67135d1de,
     type: 3}
   m_PrefabInstance: {fileID: 7623724708678293741}
   m_PrefabAsset: {fileID: 0}

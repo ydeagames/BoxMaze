@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
-  arrowColor: {fileID: 1586153974352361599}
+  arrowColor: {fileID: 6643263754022848988}
   direction: 0
   cw: 0
 --- !u!65 &188972991551934983
@@ -137,9 +137,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1793466932247224934}
   m_PrefabAsset: {fileID: 0}
---- !u!212 &1586153974352361599 stripped
+--- !u!212 &6643263754022848988 stripped
 SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 1072008508298877465, guid: ae4862d725e048c43bfddf0c6cad3409,
+  m_CorrespondingSourceObject: {fileID: 4959080582605958074, guid: ae4862d725e048c43bfddf0c6cad3409,
     type: 3}
   m_PrefabInstance: {fileID: 1793466932247224934}
   m_PrefabAsset: {fileID: 0}
