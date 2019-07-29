@@ -18,6 +18,8 @@ public class Maze
 
     // 穴掘り開始候補座標
     private List<Cell> StartCells;
+    // スタート
+    Cell startCell;
 
     // コンストラクタ
     public Maze(Cell size, Cell start)
@@ -30,6 +32,7 @@ public class Maze
         if (height % 2 == 0) height++;
 
         // 迷路情報を初期化
+        this.startCell = start;
         this.Width = width;
         this.Height = height;
         Data = new int[width, height];
@@ -107,7 +110,7 @@ public class Maze
                 if (this.Data[x - 1, y] == Wall && this.Data[x - 2, y] == Wall)
                     directions.Add(Direction.Left);
             }
-            catch(IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException e)
             {
                 UnityEngine.Debug.LogFormat("ERROR {0}", e);
             }
@@ -179,9 +182,24 @@ public class Maze
         return cell;
     }
 
+    public Maze.RouteNode? GetGoal()
+    {
+        Maze.RouteNode? longest = null;
+        foreach (var route in GetRoutes())
+            if (route.Count > 0)
+            {
+                var last = route.Last();
+                if (!longest.HasValue || last.pos.Count > longest.Value.pos.Count)
+                    longest = last;
+            }
+        return longest;
+    }
+
     // デバッグ用処理
     public void DebugPrint()
     {
+        var start = startCell;
+        var goal = GetGoal();
         StringBuilder sb = new StringBuilder();
         sb.AppendLine($"Width: {Data.GetLength(0)}");
         sb.AppendLine($"Height: {Data.GetLength(1)}");
@@ -189,7 +207,12 @@ public class Maze
         {
             for (int x = 0; x < Data.GetLength(0); x++)
             {
-                sb.Append(Data[x, y] == Wall ? "■" : "　");
+                if (x == start.X && y == start.Y)
+                    sb.Append("Ｓ");
+                else if (goal.HasValue && x == goal.Value.pos.X && y == goal.Value.pos.Y)
+                    sb.Append("Ｇ");
+                else
+                    sb.Append(Data[x, y] == Wall ? "■" : "　");
             }
             sb.AppendLine();
         }
@@ -197,8 +220,8 @@ public class Maze
     }
 
     // 通路・壁情報
-    const int Path = 0;
-    const int Wall = 1;
+    public const int Path = 0;
+    public const int Wall = 1;
 
     // セル情報
     public class Cell
@@ -214,7 +237,7 @@ public class Maze
             }
             set
             {
-                X = value * 2 - 1;
+                X = value * 2 + 1;
             }
         }
         public int IY
@@ -225,7 +248,7 @@ public class Maze
             }
             set
             {
-                Y = value * 2 - 1;
+                Y = value * 2 + 1;
             }
         }
     }

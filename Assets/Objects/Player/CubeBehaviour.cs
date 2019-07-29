@@ -129,7 +129,8 @@ public class CubeBehaviour : MonoBehaviour
         var nextPos = nextPoint.ToMazePos();
 
         // いけるかどうか
-        var tile = FloorBehaviour.GetInstance().Get(nextPos.x, nextPos.y);
+        var floor = FloorBehaviour.GetInstance();
+        var tile = floor.Get(nextPos);
         if (tile == null || tile.tileId != GetSideId(nextRotation))
         {
             //var currentPoint = currentPoint;
@@ -139,6 +140,16 @@ public class CubeBehaviour : MonoBehaviour
             //    nextPoint, GetSideId(nextRotation), nextRotation.eulerAngles,
             //    currentPos, FloorBehaviour.GetInstance().Get(currentPos.x, currentPos.y).tileId,
             //    nextPos, tile.tileId);
+
+            {
+                var pos1 = GetCurrentPos().ToCellPos();
+                var pos2 = nextPos.ToCellPos();
+                var mazepos = new Maze.Cell() { X = (pos1.X + pos2.X) / 2, Y = (pos1.Y + pos2.Y) / 2 }.ToVecMazePos();
+                var map = floor.maze.GetMaze();
+                if (0 <= mazepos.y && mazepos.y < map.GetLength(1) && 0 <= mazepos.x && mazepos.x < map.GetLength(0))
+                    if (map[mazepos.x, mazepos.y] == Maze.Wall)
+                        floor.CreateWall(GetCurrentPos(), nextPos);
+            }
 
             var modelRenderer = transform.Find("Model").GetComponent<Renderer>();
             var tileId = CubeBehaviour.GetSideId(CubeBehaviour.GetMoveRotation(direction, transform.localRotation));
@@ -179,18 +190,9 @@ public class CubeBehaviour : MonoBehaviour
             if (Input.GetMouseButtonDown(0) && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
             {
                 var tile = hit.collider.GetComponent<Tile>();
-                Maze.Direction? direction = null;
                 if (tile != null)
                 {
-                    var pos = tile.pos - transform.localPosition.ToMazePos();
-                    if (pos.x == 1 && pos.y == 0)
-                        direction = Maze.Direction.Right;
-                    else if (pos.x == -1 && pos.y == 0)
-                        direction = Maze.Direction.Left;
-                    else if (pos.x == 0 && pos.y == 1)
-                        direction = Maze.Direction.Down;
-                    else if (pos.x == 0 && pos.y == -1)
-                        direction = Maze.Direction.Up;
+                    Maze.Direction? direction = (tile.pos - GetCurrentPos()).ToDirection();
                     if (direction.HasValue)
                         Move(direction.Value, Quaternion.identity);
                 }

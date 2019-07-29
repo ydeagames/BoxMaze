@@ -2,8 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class PositionExtensions
+public static class MazeExtensions
 {
+    public static Vector2Int ToVecMazePos(this Maze.Cell pos)
+    {
+        return new Vector2Int(pos.X, pos.Y);
+    }
+
+    public static Vector2Int ToVecPos(this Maze.Cell pos)
+    {
+        return new Vector2Int(pos.IX, pos.IY);
+    }
+
+    public static Maze.Cell ToCellMazePos(this Vector2Int pos)
+    {
+        return new Maze.Cell() { X = pos.x, Y = pos.y };
+    }
+
+    public static Maze.Cell ToCellPos(this Vector2Int pos)
+    {
+        return new Maze.Cell() { IX = pos.x, IY = pos.y };
+    }
+
     public static Vector2Int ToMazePos(this Vector3 pos)
     {
         return new Vector2Int(Mathf.RoundToInt(pos.x), -Mathf.RoundToInt(pos.z));
@@ -41,29 +61,5 @@ public static class PositionExtensions
         else if (move.y == -1)
             return Maze.Direction.Up;
         return null;
-    }
-}
-
-public class Tile : MonoBehaviour
-{
-    public int tileId;
-    public Material tileMaterial;
-    public Vector2Int pos;
-    public Material material
-    {
-        set { GetComponent<Renderer>().material = value; }
-        get { return GetComponent<Renderer>().material; }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        GetComponent<Renderer>().material = tileMaterial;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
