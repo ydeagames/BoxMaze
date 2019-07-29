@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Face11
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: 91d3fcbd5754eb24ab3cca45b6f9ad60, type: 2}
-  color: {r: 0.9058824, g: 0, b: 0.07450981, a: 1}
+  color: {r: 1, g: 0.28235295, b: 0.7294118, a: 1}

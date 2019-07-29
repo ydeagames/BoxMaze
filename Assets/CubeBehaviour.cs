@@ -6,7 +6,8 @@ public class CubeBehaviour : MonoBehaviour
 {
     public Transform cameraWrapper;
 
-    public float cubeAngle = 15f;   // ここを変えると回転速度が変わる
+    public float CubeAngle = 15f;   // ここを変えると回転速度が変わる
+    public float UnableCubeAcc = 1f;   // ここを変えると回転速度が変わる
 
     float cubeSize = 1f;           // キューブの大きさ
     float cubeSizeHalf = .5f;       // キューブの大きさの半分
@@ -127,9 +128,7 @@ public class CubeBehaviour : MonoBehaviour
 
         // いけるかどうか
         var tile = FloorBehaviour.GetInstance().Get(nextPos.x, nextPos.y);
-        if (tile == null)
-            return;
-        if (tile.tileId != GetSideId(nextRotation))
+        if (tile == null || tile.tileId != GetSideId(nextRotation))
         {
             //var currentPoint = currentPoint;
             //var currentPos = currentPoint.ToMazePos();
@@ -139,10 +138,18 @@ public class CubeBehaviour : MonoBehaviour
             //    currentPos, FloorBehaviour.GetInstance().Get(currentPos.x, currentPos.y).tileId,
             //    nextPos, tile.tileId);
 
-            return;
+            var modelRenderer = transform.Find("Model").GetComponent<Renderer>();
+            var tileId = CubeBehaviour.GetSideId(CubeBehaviour.GetMoveRotation(direction, transform.localRotation));
+            StartCoroutine(UnableMove(rotatePoint, rotateAxis, new ChangeColor[]
+            {
+                (Color diffuse, Color emission)=> { tile.material.color = diffuse; tile.material.SetColor("_EmissionColor", emission); },
+                (Color diffuse, Color emission)=> { modelRenderer.materials[tileId].color = diffuse; modelRenderer.materials[tileId].SetColor("_EmissionColor", emission); },
+            }));
         }
-
-        StartCoroutine(MoveCube(rotatePoint, rotateAxis));
+        else
+        {
+            StartCoroutine(MoveCube(rotatePoint, rotateAxis));
+        }
     }
 
     public Vector2Int GetCurrentPos()
@@ -152,7 +159,7 @@ public class CubeBehaviour : MonoBehaviour
 
     void Update()
     {
-        Quaternion rot = Quaternion.Euler(0, Mathf.FloorToInt(cameraWrapper.localEulerAngles.y / 90) * 90, 0);
+        Quaternion rot = Quaternion.Euler(0, Mathf.CeilToInt(cameraWrapper.localEulerAngles.y / 90) * 90, 0);
         Maze.Direction? direction = null;
         if (Input.GetKeyDown(KeyCode.RightArrow))
             direction = Maze.Direction.Right;
@@ -166,12 +173,64 @@ public class CubeBehaviour : MonoBehaviour
             Move(direction.Value, rot);
     }
 
+    delegate void ChangeColor(Color diffuse, Color emission);
+
+    void SnapCube()
+    {
+        Vector3 euler = transform.localEulerAngles;
+        euler.x = Mathf.RoundToInt(euler.x / 90f) * 90f;
+        euler.y = Mathf.RoundToInt(euler.y / 90f) * 90f;
+        euler.z = Mathf.RoundToInt(euler.z / 90f) * 90f;
+        transform.localEulerAngles = euler;
+
+        Vector3 pos = transform.localPosition;
+        pos.x = Mathf.RoundToInt(pos.x);
+        pos.y = Mathf.FloorToInt(pos.y) + .5f;
+        pos.z = Mathf.RoundToInt(pos.z);
+        transform.localPosition = pos;
+    }
+
+    IEnumerator UnableMove(Vector3 rotatePoint, Vector3 rotateAxis, ChangeColor[] colorApplyees)
+    {
+        //回転中のフラグを立てる
+        isRotate = true;
+
+        //回転処理
+        float prog = 0f;
+        float vel = CubeAngle;
+        float pos = 0f;
+        for (; vel > 0 || pos > 0f; vel -= UnableCubeAcc, pos += vel, prog += .5f)
+        {
+            transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), vel);
+
+            //var p = (Mathf.Sin(prog) + 1) / 2;
+            //var diffuse = new Color(1, p, p);
+            //var emission = new Color(1 - p, 1 - p, 1 - p);
+            //foreach (var applyee in colorApplyees)
+            //    applyee.Invoke(diffuse, emission);
+
+            yield return null;
+        }
+
+        transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), pos);
+
+        SnapCube();
+        foreach (var applyee in colorApplyees)
+            applyee.Invoke(Color.white, Color.black);
+
+        //回転中のフラグを倒す
+        isRotate = false;
+
+        yield break;
+    }
+
     IEnumerator MoveCube(Vector3 rotatePoint, Vector3 rotateAxis)
     {
         //回転中のフラグを立てる
         isRotate = true;
 
         //回転処理
+        float cubeAngle = CubeAngle;
         float sumAngle = 0f; //angleの合計を保存
         while (sumAngle < 90f)
         {
@@ -185,6 +244,8 @@ public class CubeBehaviour : MonoBehaviour
 
             yield return null;
         }
+
+        SnapCube();
 
         //回転中のフラグを倒す
         isRotate = false;

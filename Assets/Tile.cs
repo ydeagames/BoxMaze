@@ -48,6 +48,11 @@ public class Tile : MonoBehaviour
 {
     public int tileId;
     public Material tileMaterial;
+    public Material material
+    {
+        set { GetComponent<Renderer>().material = value; }
+        get { return GetComponent<Renderer>().material; }
+    }
 
     // Start is called before the first frame update
     void Start()
