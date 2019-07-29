@@ -159,18 +159,41 @@ public class CubeBehaviour : MonoBehaviour
 
     void Update()
     {
-        Quaternion rot = Quaternion.Euler(0, Mathf.CeilToInt(cameraWrapper.localEulerAngles.y / 90) * 90, 0);
-        Maze.Direction? direction = null;
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-            direction = Maze.Direction.Right;
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
-            direction = Maze.Direction.Left;
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-            direction = Maze.Direction.Down;
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
-            direction = Maze.Direction.Up;
-        if (direction.HasValue)
-            Move(direction.Value, rot);
+        {
+            Quaternion rot = Quaternion.Euler(0, Mathf.CeilToInt(cameraWrapper.localEulerAngles.y / 90) * 90, 0);
+            Maze.Direction? direction = null;
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+                direction = Maze.Direction.Right;
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                direction = Maze.Direction.Left;
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
+                direction = Maze.Direction.Down;
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+                direction = Maze.Direction.Up;
+            if (direction.HasValue)
+                Move(direction.Value, rot);
+        }
+        {
+            if (Input.GetMouseButtonDown(0) && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+            {
+                var tile = hit.collider.GetComponent<Tile>();
+                Maze.Direction? direction = null;
+                if (tile != null)
+                {
+                    var pos = tile.pos - transform.localPosition.ToMazePos();
+                    if (pos.x == 1 && pos.y == 0)
+                        direction = Maze.Direction.Right;
+                    else if (pos.x == -1 && pos.y == 0)
+                        direction = Maze.Direction.Left;
+                    else if (pos.x == 0 && pos.y == 1)
+                        direction = Maze.Direction.Down;
+                    else if (pos.x == 0 && pos.y == -1)
+                        direction = Maze.Direction.Up;
+                    if (direction.HasValue)
+                        Move(direction.Value, Quaternion.identity);
+                }
+            }
+        }
     }
 
     delegate void ChangeColor(Color diffuse, Color emission);

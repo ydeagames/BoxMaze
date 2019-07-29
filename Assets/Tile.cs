@@ -48,6 +48,7 @@ public class Tile : MonoBehaviour
 {
     public int tileId;
     public Material tileMaterial;
+    public Vector2Int pos;
     public Material material
     {
         set { GetComponent<Renderer>().material = value; }
