@@ -13,6 +13,11 @@ public class SceneController : MonoBehaviour
         MyFade.Get().Fadeout("GameScene");
     }
 
+    public void TitleClicked()
+    {
+        MyFade.Get().Fadeout("TitleScene");
+    }
+
     // ボタンをクリックすると終了
     public void ExitClicked()
     {

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CubeBehaviour : MonoBehaviour
 {
@@ -157,11 +158,15 @@ public class CubeBehaviour : MonoBehaviour
             {
                 (Color diffuse, Color emission)=> { if (tile != null) { tile.material.color = diffuse; tile.material.SetColor("_EmissionColor", emission); } },
                 (Color diffuse, Color emission)=> { modelRenderer.materials[tileId].color = diffuse; modelRenderer.materials[tileId].SetColor("_EmissionColor", emission); },
-            }));
+            }, ()=> { }));
         }
         else
         {
-            StartCoroutine(MoveCube(rotatePoint, rotateAxis));
+            var goal = floor.goal;
+            StartCoroutine(MoveCube(rotatePoint, rotateAxis, () => {
+                if (nextPos == goal)
+                    MyFade.Get().Fadeout("ResultScene");
+            }));
         }
     }
 
@@ -217,7 +222,7 @@ public class CubeBehaviour : MonoBehaviour
         transform.localPosition = pos;
     }
 
-    IEnumerator UnableMove(Vector3 rotatePoint, Vector3 rotateAxis, ChangeColor[] colorApplyees)
+    IEnumerator UnableMove(Vector3 rotatePoint, Vector3 rotateAxis, ChangeColor[] colorApplyees, Action callback)
     {
         //回転中のフラグを立てる
         isRotate = true;
@@ -248,10 +253,12 @@ public class CubeBehaviour : MonoBehaviour
         //回転中のフラグを倒す
         isRotate = false;
 
+        callback();
+
         yield break;
     }
 
-    IEnumerator MoveCube(Vector3 rotatePoint, Vector3 rotateAxis)
+    IEnumerator MoveCube(Vector3 rotatePoint, Vector3 rotateAxis, Action callback)
     {
         //回転中のフラグを立てる
         isRotate = true;
@@ -277,6 +284,8 @@ public class CubeBehaviour : MonoBehaviour
 
         //回転中のフラグを倒す
         isRotate = false;
+
+        callback();
 
         yield break;
     }

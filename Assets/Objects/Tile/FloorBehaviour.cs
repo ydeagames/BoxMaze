@@ -15,6 +15,7 @@ public class FloorBehaviour : MonoBehaviour
     public CubeBehaviour player;
     public Dictionary<(Vector2Int, Vector2Int), Wall> walls = new Dictionary<(Vector2Int, Vector2Int), Wall>();
     public Maze maze;
+    public Vector2Int goal;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +41,8 @@ public class FloorBehaviour : MonoBehaviour
         {
             Debug.LogFormat("Longest is ({0},{1}), Count={2}", longest.Value.pos.IX, longest.Value.pos.IY, longest.Value.pos.Count);
 
-            var goalpos = longest.Value.pos.ToVecPos().ToWorldPos();
+            goal = longest.Value.pos.ToVecPos();
+            var goalpos = goal.ToWorldPos();
             var flagEnd = Instantiate(flagEndPrefab, transform.parent);
             flagEnd.transform.localPosition = goalpos;
         }
@@ -69,7 +71,7 @@ public class FloorBehaviour : MonoBehaviour
                 Create(pos, id);
 
                 //Create(pos.x, pos.y, Random.Range(0, tileMaterials.Length));
-                yield return new WaitForSeconds(.01f);
+                //yield return new WaitForSeconds(.01f);
             }
         yield break;
     }
