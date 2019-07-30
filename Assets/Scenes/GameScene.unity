@@ -507,6 +507,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 2606612831198090909, guid: 491e5d066a770c0408b239f32ac630d6,
     type: 3}
+  wallPrefab: {fileID: 754394779474533320, guid: 5c3f63af25a69f444ab158d497f1d54a,
+    type: 3}
   flagStartPrefab: {fileID: 6887789684252600470, guid: 5a29a662fbd1655458087f1a5c4f7666,
     type: 3}
   flagEndPrefab: {fileID: 1681739756088032529, guid: 5ac4665012e52404e9383a78fcb24bf5,

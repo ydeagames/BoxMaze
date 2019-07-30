@@ -10,7 +10,7 @@ public class SceneController : MonoBehaviour
     // ボタンをクリックするとBattleSceneに移動します
     public void ButtonClicked()
     {
-        SceneManager.LoadScene("GameScene");
+        MyFade.Get().Fadeout("GameScene");
     }
 
     // ボタンをクリックすると終了
