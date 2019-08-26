@@ -3,36 +3,94 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+[System.Serializable]
+public class FloorSettings
+{
+    public int id;
+    public Vector2Int size;
+    public int seed;
+    public Vector2Int spawn;
+
+    public FloorSettings(int id, int seed, Vector2Int size)
+    {
+        this.id = id;
+        var rnd = new System.Random(seed);
+        this.seed = rnd.Next();
+        this.size = size;
+        this.spawn = new Vector2Int(rnd.Next(0, size.x), rnd.Next(0, size.y));
+    }
+
+    public FloorSettings(int id, Vector2Int size)
+        : this(id, Random.Range(0, int.MaxValue), size)
+    {
+    }
+}
+
 public class FloorBehaviour : MonoBehaviour
 {
     public GameObject tilePrefab;
     public GameObject wallPrefab;
     public GameObject flagStartPrefab;
     public GameObject flagEndPrefab;
-    public Vector2Int size = new Vector2Int(10, 10);
+    public GameObject coinPrefab;
     public Faces faces;
     public Dictionary<Vector2Int, Tile> tiles = new Dictionary<Vector2Int, Tile>();
     public CubeBehaviour player;
     public Dictionary<(Vector2Int, Vector2Int), Wall> walls = new Dictionary<(Vector2Int, Vector2Int), Wall>();
     public Maze maze;
     public Vector2Int goal;
+    public class Coin
+    {
+        public Vector2Int pos;
+        public GameObject obj;
+
+        public Coin(Vector2Int pos, GameObject obj)
+        {
+            this.pos = pos;
+            this.obj = obj;
+        }
+    }
+    public List<Coin> coins;
+    public static FloorSettings nextSettings;
+    public static FloorSettings currentSettings;
+    public FloorSettings settings;
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.parent.localPosition += new Vector3(-size.x / 2 + .5f, 0, -(-size.y / 2 + .5f));
+        GameStats.Reset();
+        if (nextSettings != null)
+        {
+            settings = nextSettings;
+            currentSettings = nextSettings;
+            nextSettings = null;
+        }
+        else
+        {
+            if (currentSettings != null)
+                settings = currentSettings;
+            else
+                settings = new FloorSettings(-1, new Vector2Int(10, 10));
+        }
+        transform.parent.localPosition += new Vector3(-settings.size.x / 2 + .5f, 0, -(-settings.size.y / 2 + .5f));
+        var rnd = new System.Random(settings.seed);
+        coins = new List<Coin>();
+        for (int i = 0; i < 3; i++)
+        {
+            coins.Add(new Coin(new Vector2Int(rnd.Next(0, settings.size.x), rnd.Next(0, settings.size.y)), null));
+        }
         StartCoroutine(Generate());
     }
 
     IEnumerator Generate()
     {
-        var start = new Vector2Int(Random.Range(0, size.x), Random.Range(0, size.y)).ToCellPos();
-        var playerpos = start.ToVecPos().ToWorldPos(); ;
+        var start = settings.spawn.ToCellPos();
+        var playerpos = start.ToVecPos().ToWorldPos();
         player.transform.localPosition = playerpos + new Vector3(0, .5f, 0);
         var flagStart = Instantiate(flagStartPrefab, transform.parent);
         flagStart.transform.localPosition = playerpos;
 
-        maze = new Maze(size.ToCellPos(), start);
+        maze = new Maze(settings.size.ToCellPos(), start, settings.seed);
         maze.DebugPrint();
         var routes = maze.GetRoutes();
 
@@ -45,6 +103,13 @@ public class FloorBehaviour : MonoBehaviour
             var goalpos = goal.ToWorldPos();
             var flagEnd = Instantiate(flagEndPrefab, transform.parent);
             flagEnd.transform.localPosition = goalpos;
+        }
+
+        foreach (var coin in coins)
+        {
+            var coinpos = coin.pos.ToWorldPos();
+            var coinObj = coin.obj = Instantiate(coinPrefab, transform.parent);
+            coinObj.transform.localPosition = coinpos;
         }
 
         Dictionary<Vector2Int, Quaternion> rotMap = new Dictionary<Vector2Int, Quaternion>();

@@ -85,6 +85,7 @@ GameObject:
   - component: {fileID: 3149415135315659632}
   - component: {fileID: 3149415135315659637}
   - component: {fileID: 3149415135315659639}
+  - component: {fileID: 5840097370769735650}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -162,8 +163,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3149415135753816718}
-        m_MethodName: ButtonClicked
+      - m_Target: {fileID: 5840097370769735650}
+        m_MethodName: SceneClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -175,6 +176,19 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &5840097370769735650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3149415135315659633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb556667f078bbf4db7f5fda664c973e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scene: 
 --- !u!1 &3149415135640654465
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,7 +272,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3149415135753816713}
-  - component: {fileID: 3149415135753816718}
   - component: {fileID: 3149415135753816719}
   - component: {fileID: 3149415135753816712}
   m_Layer: 5
@@ -287,18 +300,6 @@ RectTransform:
   m_AnchoredPosition: {x: 13, y: 0}
   m_SizeDelta: {x: -26.1, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3149415135753816718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3149415135753816714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb556667f078bbf4db7f5fda664c973e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!222 &3149415135753816719
 CanvasRenderer:
   m_ObjectHideFlags: 0

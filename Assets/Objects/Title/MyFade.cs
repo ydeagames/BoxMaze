@@ -29,12 +29,28 @@ public class MyFade : MonoBehaviour
 
     public void Fadeout(string scene)
     {
-        fade.FadeIn(1, () =>
+        StartCoroutine(FadeoutCoroutine(scene));
+    }
+
+    IEnumerator FadeoutCoroutine(string scene)
+    {
+        for (float time = 0; time < 1; time += Time.deltaTime)
         {
-            SceneManager.LoadScene(scene);
-            fade.FadeOut(1, () => {
-            });
-        });
+            fade.fade.Range = Mathf.Clamp(time, 0, 1);
+            yield return null;
+        }
+
+        fade.fade.Range = 1;
+        SceneManager.LoadScene(scene);
+
+        for (float time = 0; time < 1; time += Time.deltaTime)
+        {
+            fade.fade.Range = Mathf.Clamp(1 - time, 0, 1);
+            yield return null;
+        }
+
+        fade.fade.Range = 0;
+        yield break;
     }
 
     public static MyFade Get()

@@ -16,13 +16,15 @@ public class Maze
     }
     private List<List<RouteNode>> Routes;
 
+    private Random rnd;
+
     // 穴掘り開始候補座標
     private List<Cell> StartCells;
     // スタート
     Cell startCell;
 
     // コンストラクタ
-    public Maze(Cell size, Cell start)
+    public Maze(Cell size, Cell start, int seed)
     {
         var width = size.X;
         var height = size.Y;
@@ -30,6 +32,9 @@ public class Maze
         if (width < 5 || height < 5) throw new ArgumentOutOfRangeException();
         if (width % 2 == 0) width++;
         if (height % 2 == 0) height++;
+
+        // ランダム
+        rnd = new Random(seed);
 
         // 迷路情報を初期化
         this.startCell = start;
@@ -94,7 +99,6 @@ public class Maze
     private void Dig(int x, int y, int count)
     {
         // 指定座標から掘れなくなるまで堀り続ける
-        var rnd = new Random();
         while (true)
         {
             // 掘り進めることができる方向のリストを作成
@@ -174,7 +178,6 @@ public class Maze
         if (StartCells.Count == 0) return null;
 
         // ランダムに開始座標を取得する
-        var rnd = new Random();
         var index = rnd.Next(StartCells.Count);
         var cell = StartCells[index];
         StartCells.RemoveAt(index);

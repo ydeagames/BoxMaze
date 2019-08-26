@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class CubeBehaviour : MonoBehaviour
 {
@@ -152,20 +153,36 @@ public class CubeBehaviour : MonoBehaviour
                         floor.CreateWall(GetCurrentPos(), nextPos);
             }
 
-            var modelRenderer = transform.Find("Model").GetComponent<Renderer>();
+            var modelRenderer = transform.Find("CubeModel").Find("Model").GetComponent<Renderer>();
             var tileId = CubeBehaviour.GetSideId(CubeBehaviour.GetMoveRotation(direction, transform.localRotation));
             StartCoroutine(UnableMove(rotatePoint, rotateAxis, new ChangeColor[]
             {
                 (Color diffuse, Color emission)=> { if (tile != null) { tile.material.color = diffuse; tile.material.SetColor("_EmissionColor", emission); } },
                 (Color diffuse, Color emission)=> { modelRenderer.materials[tileId].color = diffuse; modelRenderer.materials[tileId].SetColor("_EmissionColor", emission); },
-            }, ()=> { }));
+            }, () => { }));
+            GameStats.currentStats.miss++;
         }
         else
         {
             var goal = floor.goal;
-            StartCoroutine(MoveCube(rotatePoint, rotateAxis, () => {
+            var coins = floor.coins;
+            StartCoroutine(MoveCube(rotatePoint, rotateAxis, () =>
+            {
+                coins.ForEach(e => {
+                    if (e.pos == nextPos)
+                    {
+                        Destroy(e.obj);
+                        GameStats.currentStats.coin++;
+                    }
+                });
+                coins.RemoveAll(e => e.pos == nextPos);
+
                 if (nextPos == goal)
-                    MyFade.Get().Fadeout("ResultScene");
+                {
+                    GameStats.currentStats.cleared = true;
+                    GameStats.Save(FloorBehaviour.currentSettings.id, GameStats.currentStats);
+                    SceneController.LoadScene("ResultScene");
+                }
             }));
         }
     }
@@ -177,6 +194,8 @@ public class CubeBehaviour : MonoBehaviour
 
     void Update()
     {
+        GameStats.currentStats.time += Time.deltaTime;
+
         {
             Quaternion rot = Quaternion.Euler(0, Mathf.CeilToInt(cameraWrapper.localEulerAngles.y / 90) * 90, 0);
             Maze.Direction? direction = null;
@@ -233,7 +252,7 @@ public class CubeBehaviour : MonoBehaviour
         float pos = 0f;
         for (; vel > 0 || pos > 0f; vel -= UnableCubeAcc, pos += vel, prog += .5f)
         {
-            transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), vel * 60 * Time.deltaTime);
+            transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), vel);
 
             //var p = (Mathf.Sin(prog) + 1) / 2;
             //var diffuse = new Color(1, p, p);
@@ -269,13 +288,13 @@ public class CubeBehaviour : MonoBehaviour
         while (pos < 90f)
         {
             vel += CubeAcc;
-            pos += vel * 60 * Time.deltaTime;
+            pos += vel;
 
             // 90度以上回転しないように値を制限
             if (pos > 90f)
                 vel -= pos - 90f;
 
-            transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), vel * 60 * Time.deltaTime);
+            transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), vel);
 
             yield return null;
         }

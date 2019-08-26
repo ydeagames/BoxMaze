@@ -7,15 +7,27 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    public string scene;
+
     // ボタンをクリックするとBattleSceneに移動します
     public void ButtonClicked()
     {
-        MyFade.Get().Fadeout("GameScene");
+        LoadScene("GameScene");
     }
 
     public void TitleClicked()
     {
-        MyFade.Get().Fadeout("TitleScene");
+        LoadScene("TitleScene");
+    }
+
+    public void SceneClicked()
+    {
+        LoadScene(scene);
+    }
+
+    public static void LoadScene(string scene)
+    {
+        MyFade.Get().Fadeout(scene);
     }
 
     // ボタンをクリックすると終了

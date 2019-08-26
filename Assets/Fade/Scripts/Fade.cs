@@ -26,7 +26,7 @@ using UnityEngine.Assertions;
 
 public class Fade : MonoBehaviour
 {
-	IFade fade;
+	public IFade fade;
 
 	void Start ()
 	{
