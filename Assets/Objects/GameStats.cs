@@ -34,6 +34,7 @@ public class GameStats
         PlayerPrefs.SetInt($"stats.{id}.coin", stats.coin);
         PlayerPrefs.SetFloat($"stats.{id}.time", stats.time);
         PlayerPrefs.SetInt($"stats.{id}.miss", stats.miss);
+        PlayerPrefs.Save();
     }
 
     public static GameStats Load(int id)

@@ -17,6 +17,10 @@ public class CubeBehaviour : MonoBehaviour
     float cubeSizeHalf = .5f;       // キューブの大きさの半分
     bool isRotate = false;          // 回転中に立つフラグ。回転中は入力を受け付けない
 
+    public AudioClip audioGoal;
+    public AudioClip audioCoin;
+    public AudioClip audioMiss;
+
     static Vector3[] sides =
     {
         Vector3.forward,
@@ -161,6 +165,7 @@ public class CubeBehaviour : MonoBehaviour
                 (Color diffuse, Color emission)=> { modelRenderer.materials[tileId].color = diffuse; modelRenderer.materials[tileId].SetColor("_EmissionColor", emission); },
             }, () => { }));
             GameStats.currentStats.miss++;
+            AudioSource.PlayClipAtPoint(audioMiss, Camera.main.transform.position);
         }
         else
         {
@@ -171,6 +176,7 @@ public class CubeBehaviour : MonoBehaviour
                 coins.ForEach(e => {
                     if (e.pos == nextPos)
                     {
+                        AudioSource.PlayClipAtPoint(audioCoin, Camera.main.transform.position);
                         Destroy(e.obj);
                         GameStats.currentStats.coin++;
                     }
@@ -179,6 +185,7 @@ public class CubeBehaviour : MonoBehaviour
 
                 if (nextPos == goal)
                 {
+                    AudioSource.PlayClipAtPoint(audioGoal, Camera.main.transform.position);
                     var before = GameStats.Load(FloorBehaviour.currentSettings.id);
                     GameStats.currentStats.cleared = true;
                     var stats = new GameStats(GameStats.currentStats);
@@ -263,7 +270,7 @@ public class CubeBehaviour : MonoBehaviour
             //foreach (var applyee in colorApplyees)
             //    applyee.Invoke(diffuse, emission);
 
-            yield return null;
+            yield return new WaitForSeconds(.01f);
         }
 
         transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), pos);
@@ -299,7 +306,7 @@ public class CubeBehaviour : MonoBehaviour
 
             transform.RotateAround(transform.parent.TransformPoint(rotatePoint), transform.parent.TransformDirection(rotateAxis), vel);
 
-            yield return null;
+            yield return new WaitForSeconds(.01f);
         }
 
         SnapCube();

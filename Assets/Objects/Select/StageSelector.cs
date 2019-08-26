@@ -8,6 +8,7 @@ public class StageSelector : MonoBehaviour
     public GameObject prefab;
     GameObject[,] buttons;
     int page = 0;
+    public AudioClip audioClip;
 
     // Start is called before the first frame update
     void Start()
@@ -35,13 +36,21 @@ public class StageSelector : MonoBehaviour
     public void NextPage()
     {
         if (page < 3)
+        {
+            if (audioClip != null)
+                AudioSource.PlayClipAtPoint(audioClip, Vector3.zero);
             ShowPage(++page);
+        }
     }
 
     public void PrevPage()
     {
         if (page > 0)
+        {
+            if (audioClip != null)
+                AudioSource.PlayClipAtPoint(audioClip, Vector3.zero);
             ShowPage(--page);
+        }
     }
 
     public void ShowPage(int page)

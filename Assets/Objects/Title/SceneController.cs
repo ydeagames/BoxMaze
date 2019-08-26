@@ -8,20 +8,42 @@ using UnityEngine.SceneManagement;
 public class SceneController : MonoBehaviour
 {
     public string scene;
+    public AudioClip audioClip;
 
     // ボタンをクリックするとBattleSceneに移動します
     public void ButtonClicked()
     {
-        LoadScene("GameScene");
+        Scene("GameScene");
     }
 
     public void TitleClicked()
     {
-        LoadScene("TitleScene");
+        Scene("TitleScene");
+    }
+
+    public void SelectOrHowTo()
+    {
+        if (PlayerPrefs.GetInt("howto.first") != 1)
+            HowToClicked();
+        else
+            Scene("SelectScene");
+    }
+
+    public void HowToClicked()
+    {
+        Scene("HowToScene");
+        PlayerPrefs.SetInt("howto.first", 1);
     }
 
     public void SceneClicked()
     {
+        Scene(scene);
+    }
+
+    public void Scene(string scene)
+    {
+        if (audioClip != null)
+            AudioSource.PlayClipAtPoint(audioClip, Vector3.zero);
         LoadScene(scene);
     }
 
