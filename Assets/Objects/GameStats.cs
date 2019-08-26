@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class GameStats
 {
     public bool cleared;
@@ -13,6 +14,18 @@ public class GameStats
     public static void Reset()
     {
         currentStats = new GameStats();
+    }
+
+    public GameStats()
+    {
+    }
+
+    public GameStats(GameStats stats)
+    {
+        this.cleared = stats.cleared;
+        this.coin = stats.coin;
+        this.time = stats.time;
+        this.miss = stats.miss;
     }
 
     public static void Save(int id, GameStats stats)

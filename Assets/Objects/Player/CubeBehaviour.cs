@@ -179,8 +179,11 @@ public class CubeBehaviour : MonoBehaviour
 
                 if (nextPos == goal)
                 {
+                    var before = GameStats.Load(FloorBehaviour.currentSettings.id);
                     GameStats.currentStats.cleared = true;
-                    GameStats.Save(FloorBehaviour.currentSettings.id, GameStats.currentStats);
+                    var stats = new GameStats(GameStats.currentStats);
+                    stats.coin = Math.Max(stats.coin, before.coin);
+                    GameStats.Save(FloorBehaviour.currentSettings.id, stats);
                     SceneController.LoadScene("ResultScene");
                 }
             }));

@@ -34,7 +34,8 @@ public class StageSelector : MonoBehaviour
 
     public void NextPage()
     {
-        ShowPage(++page);
+        if (page < 3)
+            ShowPage(++page);
     }
 
     public void PrevPage()
