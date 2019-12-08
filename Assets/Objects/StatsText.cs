@@ -18,6 +18,6 @@ public class StatsText : MonoBehaviour
     void Update()
     {
         var stats = GameStats.currentStats;
-        text.text = $"時間	: {((int)stats.time / 60).ToString("00")}:{((int)stats.time).ToString("00")}\nミス	: {stats.miss}\nコイン	: {stats.coin}";
+        text.text = $"時間	: {((int)stats.time / 60).ToString("00")}:{((int)stats.time % 60).ToString("00")}\nミス	: {stats.miss}\nコイン	: {stats.coin}";
     }
 }

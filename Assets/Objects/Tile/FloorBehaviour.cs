@@ -147,7 +147,7 @@ public class FloorBehaviour : MonoBehaviour
         if (tile == null)
         {
             var gobj = Instantiate(tilePrefab, transform);
-            tile = gobj.AddComponent<Tile>();
+            tile = gobj.GetComponent<Tile>();
         }
         else
             Debug.LogFormat("Duplicate Pos ({0}, {1})", pos.x, pos.y);

@@ -7,16 +7,18 @@ public class Tile : MonoBehaviour
     public int tileId;
     public Material tileMaterial;
     public Vector2Int pos;
+    public Renderer modelRenderer;
+
     public Material material
     {
-        set { GetComponent<Renderer>().material = value; }
-        get { return GetComponent<Renderer>().material; }
+        set { modelRenderer.material = value; }
+        get { return modelRenderer.material; }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Renderer>().material = tileMaterial;
+        modelRenderer.material = tileMaterial;
     }
 
     // Update is called once per frame
