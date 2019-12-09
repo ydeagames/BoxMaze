@@ -1,20 +1,15 @@
 fileFormatVersion: 2
-guid: f8ce1ba19b6c1ee45ab9e95a257b87d1
+guid: 0946008a028f2774085dec2757d72d50
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: CoinMaterial
+    2100000: 01 - Default
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Coin
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: CoinMaterial
-    second: {fileID: 2100000, guid: 4c2a085de8e4fef48bcda82c8125e214, type: 2}
+    4300000: Cylinder01
+  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0
