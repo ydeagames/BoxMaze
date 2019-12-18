@@ -10,11 +10,7 @@ public class Stage : MonoBehaviour
 
     public void OnClicked()
     {
-        System.Random rnd = new System.Random(id);
-        int sizebase = 4;
-        int sizeex = (id % 8) * (id / 8) / 2;
-        FloorBehaviour.nextSettings = new FloorSettings(id, id, new Vector2Int(sizebase + rnd.Next(0, sizeex), sizebase + rnd.Next(0, sizeex)));
-        GetComponent<SceneController>().Scene("GameScene");
+        GetComponent<SceneController>().StartGame(id);
     }
 
     public void UpdateDisplay()

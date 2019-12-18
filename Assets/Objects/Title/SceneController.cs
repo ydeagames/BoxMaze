@@ -47,6 +47,22 @@ public class SceneController : MonoBehaviour
         LoadScene(scene);
     }
 
+    public void StartGame(int id)
+    {
+        System.Random rnd = new System.Random(id);
+        int sizebase = 4;
+        int sizeex = (id % 8) * (id / 8) / 2;
+        FloorBehaviour.nextSettings = new FloorSettings(id, id, new Vector2Int(sizebase + rnd.Next(0, sizeex), sizebase + rnd.Next(0, sizeex)));
+        Scene("GameScene");
+    }
+
+    public void NextScene()
+    {
+        if (audioClip != null)
+            AudioSource.PlayClipAtPoint(audioClip, Vector3.zero);
+        StartGame(FloorBehaviour.currentSettings.id + 1);
+    }
+
     public static void LoadScene(string scene)
     {
         MyFade.Get().Fadeout(scene);

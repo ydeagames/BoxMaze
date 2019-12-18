@@ -18,6 +18,11 @@ public class StatsText : MonoBehaviour
     void Update()
     {
         var stats = GameStats.currentStats;
-        text.text = $"時間	: {((int)stats.time / 60).ToString("00")}:{((int)stats.time % 60).ToString("00")}\nミス	: {stats.miss}\nコイン	: {stats.coin}";
+        var star = !stats.cleared ? "" : (stats.coin <= 0 ? "☆☆☆" : (stats.coin == 1 ? "★☆☆" : (stats.coin == 2 ? "★★☆" : "★★★")));
+        text.text =
+              $"ステージ {FloorBehaviour.currentSettings.id.ToString("D2")}\n"
+            + $"時間	: {((int)stats.time / 60).ToString("00")}:{((int)stats.time % 60).ToString("00")}\n"
+            + $"ミス	: {stats.miss}\n"
+            + $"コイン	: {star}";
     }
 }
