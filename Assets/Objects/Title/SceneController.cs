@@ -21,6 +21,14 @@ public class SceneController : MonoBehaviour
         Scene("TitleScene");
     }
 
+    public void SelectRandomOrHowTo()
+    {
+        if (PlayerPrefs.GetInt("howto.first") != 1)
+            HowToClicked();
+        else
+            Scene("RandomSelectScene");
+    }
+
     public void SelectOrHowTo()
     {
         if (PlayerPrefs.GetInt("howto.first") != 1)
