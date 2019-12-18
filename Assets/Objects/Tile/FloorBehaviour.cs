@@ -50,7 +50,7 @@ public class FloorBehaviour : MonoBehaviour
             this.obj = obj;
         }
     }
-    public List<Coin> coins;
+    public List<Coin> coins = new List<Coin>();
     public static FloorSettings nextSettings;
     public static FloorSettings currentSettings;
     public FloorSettings settings;
@@ -73,12 +73,6 @@ public class FloorBehaviour : MonoBehaviour
                 settings = new FloorSettings(-1, new Vector2Int(10, 10));
         }
         transform.parent.localPosition += new Vector3(-settings.size.x / 2 + .5f, 0, -(-settings.size.y / 2 + .5f));
-        var rnd = new System.Random(settings.seed);
-        coins = new List<Coin>();
-        for (int i = 0; i < 3; i++)
-        {
-            coins.Add(new Coin(new Vector2Int(rnd.Next(0, settings.size.x), rnd.Next(0, settings.size.y)), null));
-        }
         StartCoroutine(Generate());
     }
 
@@ -105,11 +99,37 @@ public class FloorBehaviour : MonoBehaviour
             flagEnd.transform.localPosition = goalpos;
         }
 
-        foreach (var coin in coins)
         {
-            var coinpos = coin.pos.ToWorldPos();
-            var coinObj = coin.obj = Instantiate(coinPrefab, transform.parent);
-            coinObj.transform.localPosition = coinpos;
+            var rnd = new System.Random(settings.seed);
+            coins = new List<Coin>();
+            var candidates = new List<Vector2Int>();
+            foreach (var route in routes)
+                foreach (var node in route)
+                    candidates.Add(node.pos.ToVecPos());
+
+            if (candidates.Count > 2 + 3 + 2)
+            {
+                candidates.RemoveRange(0, 2);
+                if (longest.HasValue)
+                {
+                    candidates.Remove(longest.Value.pos.ToVecPos());
+                    candidates.Remove(longest.Value.before.ToVecPos());
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    var index = rnd.Next(candidates.Count);
+                    var candidate = candidates[index];
+                    candidates.RemoveAt(index);
+                    coins.Add(new Coin(candidate, null));
+                }
+            }
+
+            foreach (var coin in coins)
+            {
+                var coinpos = coin.pos.ToWorldPos();
+                var coinObj = coin.obj = Instantiate(coinPrefab, transform.parent);
+                coinObj.transform.localPosition = coinpos;
+            }
         }
 
         Dictionary<Vector2Int, Quaternion> rotMap = new Dictionary<Vector2Int, Quaternion>();
