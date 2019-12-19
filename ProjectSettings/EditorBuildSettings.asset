@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/RandomSelectScene.unity
     guid: c0ac091ed7e35e3469b4d0cca33a6a06
   - enabled: 1
+    path: Assets/Scenes/CustomSelectScene.unity
+    guid: bb9c0de342904ee4d9b070d096775550
+  - enabled: 1
     path: Assets/Scenes/GameScene.unity
     guid: e44e0cdade7dc8f4eacc8527c3eb044f
   - enabled: 1

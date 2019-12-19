@@ -20,7 +20,7 @@ public class StatsText : MonoBehaviour
         var stats = GameStats.currentStats;
         var star = !stats.cleared ? "" : (stats.coin <= 0 ? "☆☆☆" : (stats.coin == 1 ? "★☆☆" : (stats.coin == 2 ? "★★☆" : "★★★")));
         text.text =
-              $"ステージ {FloorBehaviour.currentSettings.id.ToString("D2")}\n"
+              $"ステージ {((FloorBehaviour.currentSettings == null) ? "" : FloorBehaviour.currentSettings.id.ToString("D2"))}\n"
             + $"時間	: {((int)stats.time / 60).ToString("00")}:{((int)stats.time % 60).ToString("00")}\n"
             + $"ミス	: {stats.miss}\n"
             + $"コイン	: {star}";

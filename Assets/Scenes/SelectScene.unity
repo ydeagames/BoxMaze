@@ -250,6 +250,11 @@ PrefabInstance:
       propertyPath: m_Text
       value: "\u30AB\u30B9\u30BF\u30E0\n\u30D7\u30EC\u30A4\u3078"
       objectReference: {fileID: 0}
+    - target: {fileID: 5840097370769735650, guid: 54a3f20591d334f4fb3864c06c5ee03b,
+        type: 3}
+      propertyPath: scene
+      value: CustomSelectScene
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54a3f20591d334f4fb3864c06c5ee03b, type: 3}
 --- !u!1 &307547586
@@ -1244,6 +1249,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3091319130932373694, guid: e3dd38f325be0de4a8e6c2af99cd3fc7,
+        type: 3}
+      propertyPath: scene
+      value: TitleScene
       objectReference: {fileID: 0}
     - target: {fileID: 3091319129024005073, guid: e3dd38f325be0de4a8e6c2af99cd3fc7,
         type: 3}

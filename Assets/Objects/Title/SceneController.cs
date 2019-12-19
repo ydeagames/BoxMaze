@@ -9,6 +9,7 @@ public class SceneController : MonoBehaviour
 {
     public string scene;
     public AudioClip audioClip;
+    public static string lastSelect = "SelectScene";
 
     // ボタンをクリックするとBattleSceneに移動します
     public void ButtonClicked()
@@ -48,6 +49,17 @@ public class SceneController : MonoBehaviour
         Scene(scene);
     }
 
+    public void Back()
+    {
+        Scene(lastSelect);
+    }
+
+    public void SceneAndAddLast()
+    {
+        lastSelect = SceneManager.GetActiveScene().name;
+        Scene(scene);
+    }
+
     public void Scene(string scene)
     {
         if (audioClip != null)
@@ -57,6 +69,7 @@ public class SceneController : MonoBehaviour
 
     public void StartGame(int id)
     {
+        lastSelect = SceneManager.GetActiveScene().name;
         System.Random rnd = new System.Random(id);
         int sizebase = 4;
         int sizeex = (id % 8) * (id / 8) / 2;

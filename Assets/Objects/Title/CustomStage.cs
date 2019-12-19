@@ -6,20 +6,45 @@ using UnityEngine.UI;
 public class CustomStage : MonoBehaviour
 {
     public SceneController controller;
-    public Text widthText;
-    public Text heightText;
-    public Text seedText;
+    public InputField widthText;
+    public InputField heightText;
+    public InputField seedText;
 
     public void StartCustom()
     {
         System.Random rnd = new System.Random();
-        int.TryParse(widthText.text, out int width);
-        int.TryParse(heightText.text, out int height);
+
+        bool randomized = false;
+
+        int width, height;
+        if (!int.TryParse(widthText.text, out width))
+        {
+            width = rnd.Next(27) + 3;
+            widthText.text = width.ToString();
+            randomized = true;
+        }
+        if (!int.TryParse(heightText.text, out height))
+        {
+            height = rnd.Next(27) + 3;
+            heightText.text = height.ToString();
+            randomized = true;
+        }
 
         int seed;
         if (!int.TryParse(seedText.text, out seed))
-            seed = rnd.Next();
-        //FloorBehaviour.nextSettings = new FloorSettings(id, id, new Vector2Int(, sizebase + rnd.Next(0, sizeex)));
-        //Scene("GameScene");
+            if (!string.IsNullOrEmpty(seedText.text))
+                seed = seedText.GetHashCode();
+            else
+            {
+                seed = rnd.Next();
+                seedText.text = seed.ToString();
+                randomized = true;
+            }
+
+        if (!randomized)
+        {
+            FloorBehaviour.nextSettings = new FloorSettings(-1, seed, new Vector2Int(width, height));
+            controller.SceneAndAddLast();
+        }
     }
 }
