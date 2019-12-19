@@ -67,7 +67,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: a321f71f3dd3a964fbaa03ee698b74de, type: 3}
-    m_FontSize: 34
+    m_FontSize: 46
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -78,7 +78,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u2190\u9014\u4E2D\u3067\u3084\u3081\u308B\n"
+  m_Text: "\u2190\u9014\u4E2D\u3067\u3084\u3081\u308B"
 --- !u!1 &3091319130932373682
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 3091319130932373694}
   - component: {fileID: 3091319130932373680}
   m_Layer: 5
-  m_Name: Text (1)
+  m_Name: SimpleButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,7 +117,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 18, y: -18}
-  m_SizeDelta: {x: 224.12, y: 50.53}
+  m_SizeDelta: {x: 347.51, y: 55.35}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &3091319130932373695
 CanvasRenderer:

@@ -550,7 +550,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u6642\u9593\t: 00:00\n\u30DF\u30B9\t: 0\n\u30B3\u30A4\u30F3\t: 0"
+  m_Text: "\u30B9\u30C6\u30FC\u30B8 ??\n\u6642\u9593\t: 00:00\n\u30DF\u30B9\t: 0\n\u30B3\u30A4\u30F3\t:
+    0"
 --- !u!222 &384582143
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1949,7 +1950,7 @@ PrefabInstance:
     - target: {fileID: 3091319130932373681, guid: e3dd38f325be0de4a8e6c2af99cd3fc7,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 224.12
+      value: 293.17
       objectReference: {fileID: 0}
     - target: {fileID: 3091319130932373681, guid: e3dd38f325be0de4a8e6c2af99cd3fc7,
         type: 3}
