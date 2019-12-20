@@ -16,6 +16,8 @@ public class Targetter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = target.transform.position + offset;
+        var pos = target.transform.position + offset;
+        pos.y = 0;
+        transform.position = pos;
     }
 }
