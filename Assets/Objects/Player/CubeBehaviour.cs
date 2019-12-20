@@ -177,7 +177,8 @@ public class CubeBehaviour : MonoBehaviour
             var coins = floor.coins;
             StartCoroutine(MoveCube(rotatePoint, rotateAxis, () =>
             {
-                coins.ForEach(e => {
+                coins.ForEach(e =>
+                {
                     if (e.pos == nextPos)
                     {
                         AudioSource.PlayClipAtPoint(audioCoin, Camera.main.transform.position);
@@ -208,7 +209,7 @@ public class CubeBehaviour : MonoBehaviour
         GameStats.currentStats.time += Time.deltaTime;
 
         {
-            Quaternion rot = Quaternion.Euler(0, Mathf.CeilToInt(cameraWrapper.localEulerAngles.y / 90) * 90, 0);
+            Quaternion rot = Quaternion.Euler(0, Mathf.CeilToInt((cameraWrapper.localEulerAngles.y - 45) / 90) * 90, 0);
             Maze.Direction? direction = null;
             if (Input.GetKeyDown(KeyCode.RightArrow))
                 direction = Maze.Direction.Right;

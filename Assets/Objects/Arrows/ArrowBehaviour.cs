@@ -13,7 +13,7 @@ public class ArrowBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        col = GetComponent<Collider>();
+        col = GetComponentInChildren<Collider>();
     }
 
     // Update is called once per frame
