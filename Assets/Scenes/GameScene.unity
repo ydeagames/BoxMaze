@@ -514,8 +514,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -18, y: -18}
-  m_SizeDelta: {x: 273.78, y: 127}
+  m_AnchoredPosition: {x: 0, y: -18}
+  m_SizeDelta: {x: 288.52, y: 290.76}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &384582142
 MonoBehaviour:
@@ -1711,6 +1711,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1806161340}
   - component: {fileID: 1806161336}
+  - component: {fileID: 1806161337}
+  - component: {fileID: 1806161338}
+  - component: {fileID: 1806161339}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1738,6 +1741,78 @@ MonoBehaviour:
   audioGoal: {fileID: 8300000, guid: a34f8e5f42d36f741bf3db80553e987d, type: 3}
   audioCoin: {fileID: 8300000, guid: f200af6ef3ccffa41b0a04065de988e8, type: 3}
   audioMiss: {fileID: 8300000, guid: ea024d6da540d264891eb0cf660351ec, type: 3}
+  onGoal:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1806161337}
+        m_MethodName: ClearGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onGoalInTimeAttack:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1806161338}
+        m_MethodName: Next
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &1806161337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806161335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb556667f078bbf4db7f5fda664c973e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scene: ResultScene
+  audioClip: {fileID: 8300000, guid: a34f8e5f42d36f741bf3db80553e987d, type: 3}
+--- !u!114 &1806161338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806161335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66d27378ccd6c4a43a01d3fc0b51eb87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 1806161337}
+--- !u!114 &1806161339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806161335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84287305165047743a93c13d93e099c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  challenge: {fileID: 1806161338}
 --- !u!4 &1806161340
 Transform:
   m_ObjectHideFlags: 0

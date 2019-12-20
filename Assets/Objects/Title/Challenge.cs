@@ -32,15 +32,20 @@ public class Challenge : MonoBehaviour
         if (TimeAttack.currentState == null)
             TimeAttack.currentState = new TimeAttack();
 
-        TimeAttack.currentState.id = TimeAttack.currentState.difficulty * 1000 + TimeAttack.currentState.time + 100000;
-        TimeAttack.currentState.clearedCount = 0;
-        TimeAttack.currentState.totalTime = 0;
-        TimeAttack.currentState.totalCoin = 0;
-        TimeAttack.currentState.totalMiss = 0;
-        TimeAttack.currentState.seed = new System.Random().Next();
+        {
+            TimeAttack.currentState.id = TimeAttack.currentState.difficulty * 1000 + TimeAttack.currentState.time + 100000;
+            TimeAttack.currentState.totalTime = 0;
+            TimeAttack.currentState.totalCoin = 0;
+            TimeAttack.currentState.totalMiss = 0;
+            TimeAttack.currentState.clearedCount = 0;
+            TimeAttack.currentState.seed = new System.Random().Next();
+            TimeAttack.Save(TimeAttack.currentState);
+        }
+
+        SceneController.lastSelect = "TitleScene";
 
         GameStats.Reset();
-        Next();
+        ApplyChallenge();
     }
 
     public void Next()
@@ -48,23 +53,39 @@ public class Challenge : MonoBehaviour
         if (TimeAttack.currentState == null)
             return;
 
-        if (GameStats.currentStats.cleared)
         {
             TimeAttack.currentState.totalCoin += GameStats.currentStats.coin;
             TimeAttack.currentState.totalTime += GameStats.currentStats.time;
             TimeAttack.currentState.totalMiss += GameStats.currentStats.miss;
+            TimeAttack.currentState.clearedCount++;
+            TimeAttack.currentState.seed++;
+            TimeAttack.Save(TimeAttack.currentState);
         }
-        GameStats.Reset();
 
-        var rnd = new System.Random(TimeAttack.currentState.seed++);
+        GameStats.Reset();
+        ApplyChallenge();
+    }
+
+    public void ApplyChallenge()
+    {
+        var rnd = new System.Random(TimeAttack.currentState.seed);
         int sizebase = 4;
         int sizeex = TimeAttack.currentState.difficulty * 8 + TimeAttack.currentState.clearedCount;
         FloorBehaviour.nextSettings = TimeAttack.currentState.currentStage =
             new FloorSettings(TimeAttack.currentState.id, TimeAttack.currentState.seed, new Vector2Int(sizebase + rnd.Next(0, sizeex), sizebase + rnd.Next(0, sizeex)));
 
-        TimeAttack.Save(TimeAttack.currentState);
-
         controller.Scene("GameScene");
+    }
+
+    public void Finished()
+    {
+        if (TimeAttack.currentState == null)
+            return;
+
+        TimeAttack.currentState.totalTime = TimeAttack.currentState.time;
+        GameStats.currentStats.time = 0;
+
+        controller.Scene("RandomResultScene");
     }
 
     public bool HasPausedData()

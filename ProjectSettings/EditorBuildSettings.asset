@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/RandomSelectScene.unity
     guid: 7fc1c640256be5841b949e4c848f01e4
   - enabled: 1
+    path: Assets/Scenes/RandomTimeSelectScene.unity
+    guid: 68a6d897b54046840827e34f5151f47e
+  - enabled: 1
     path: Assets/Scenes/CustomSelectScene.unity
     guid: bb9c0de342904ee4d9b070d096775550
   - enabled: 1
@@ -26,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ResultScene.unity
     guid: 5089740d5c1160e428761b642dba4039
+  - enabled: 1
+    path: Assets/Scenes/RandomResultScene.unity
+    guid: 7044915d0a82e27488eb9c7774f57f90
   m_configObjects: {}

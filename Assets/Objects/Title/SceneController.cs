@@ -67,8 +67,21 @@ public class SceneController : MonoBehaviour
         LoadScene(scene);
     }
 
+    public void ClearGame()
+    {
+        var before = GameStats.Load(FloorBehaviour.currentSettings.id);
+        GameStats.currentStats.cleared = true;
+        var stats = new GameStats(GameStats.currentStats);
+        stats.coin = System.Math.Max(stats.coin, before.coin);
+        GameStats.Save(FloorBehaviour.currentSettings.id, stats);
+        Scene("ResultScene");
+    }
+
     public void StartGame(int id)
     {
+        TimeAttack.Reset();
+        TimeAttack.Save(TimeAttack.currentState);
+
         lastSelect = SceneManager.GetActiveScene().name;
         System.Random rnd = new System.Random(id);
         int sizebase = 4;

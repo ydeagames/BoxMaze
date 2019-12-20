@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using System;
 using System.Linq;
 
@@ -20,6 +21,9 @@ public class CubeBehaviour : MonoBehaviour
     public AudioClip audioGoal;
     public AudioClip audioCoin;
     public AudioClip audioMiss;
+
+    public UnityEvent onGoal;
+    public UnityEvent onGoalInTimeAttack;
 
     static Vector3[] sides =
     {
@@ -185,13 +189,10 @@ public class CubeBehaviour : MonoBehaviour
 
                 if (nextPos == goal)
                 {
-                    AudioSource.PlayClipAtPoint(audioGoal, Camera.main.transform.position);
-                    var before = GameStats.Load(FloorBehaviour.currentSettings.id);
-                    GameStats.currentStats.cleared = true;
-                    var stats = new GameStats(GameStats.currentStats);
-                    stats.coin = Math.Max(stats.coin, before.coin);
-                    GameStats.Save(FloorBehaviour.currentSettings.id, stats);
-                    SceneController.LoadScene("ResultScene");
+                    if (TimeAttack.currentState != null)
+                        onGoalInTimeAttack.Invoke();
+                    else
+                        onGoal.Invoke();
                 }
             }));
         }
