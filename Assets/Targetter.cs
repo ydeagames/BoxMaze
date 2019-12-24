@@ -8,9 +8,9 @@ public class Targetter : MonoBehaviour
     public float movePercent = .5f;
     Vector3 startPos;
     public FloorBehaviour floor;
+    Vector3 offset;
 
     public float controllRadius = .1f;
-    public float bias = .2f;
 
     void Start()
     {
@@ -24,32 +24,25 @@ public class Targetter : MonoBehaviour
         var size = floor.settings.size;
         var min = -size.ToWorldPos();
         var max = size.ToWorldPos();
+        var bounds = new Bounds(min, Vector3.zero);
+        bounds.Encapsulate(max);
 
         var mouse = camera.ScreenToViewportPoint(Input.mousePosition);
-        var uv0 = new Vector2(Mathf.Clamp01(mouse.x), Mathf.Clamp01(mouse.y)); // 0～1
 
-        var uv = uv0;
-        var offset = Camera.main.WorldToScreenPoint(transform.position);
-        if (uv.x < controllRadius)
+        if (mouse.x < controllRadius)
             offset.x--;
-        if (uv.x > 1 - controllRadius)
+        if (mouse.x > 1 - controllRadius)
             offset.x++;
-        if (uv.y < controllRadius)
-            offset.y--;
-        if (uv.y > 1 - controllRadius)
-            offset.y++;
+        if (mouse.y < controllRadius)
+            offset.z--;
+        if (mouse.y > 1 - controllRadius)
+            offset.z++;
 
-        offset.x = Mathf.Clamp(offset.x, min.x, max.x);
-        offset.z = Mathf.Clamp(offset.z, min.z, max.z);
-        offset.y = startPos.y;
+        var pos = target.transform.position + offset;
+        pos.x = Mathf.Clamp(pos.x, bounds.min.x, bounds.max.x);
+        pos.z = Mathf.Clamp(pos.z, bounds.min.z, bounds.max.z);
+        pos.y = startPos.y;
 
-        //Debug.Log($"UV0:{uv0} UV:{uv} Mouse:{mouse}");
-        var plane = new Plane(Vector3.up, Vector3.zero);
-        var ray = Camera.main.ScreenPointToRay(offset);
-        if (plane.Raycast(ray, out float enter))
-        {
-            var pos = ray.GetPoint(enter);
-            transform.position = Vector3.Lerp(transform.position, pos, movePercent);
-        }
+        transform.position = Vector3.Lerp(transform.position, pos, movePercent);
     }
 }
