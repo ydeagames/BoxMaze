@@ -11,6 +11,8 @@ public class Targetter : MonoBehaviour
     Vector3 offset;
 
     public float controllRadius = .1f;
+    public float controllSpeed = .1f;
+    private Vector3 move;
 
     void Start()
     {
@@ -27,22 +29,27 @@ public class Targetter : MonoBehaviour
         var bounds = new Bounds(min, Vector3.zero);
         bounds.Encapsulate(max);
 
-        var mouse = camera.ScreenToViewportPoint(Input.mousePosition);
+        move = Quaternion.AngleAxis(camera.transform.eulerAngles.y, Vector3.up) * move;
+        move *= controllSpeed;
+        offset += move;
+        move = Vector3.zero;
 
-        if (mouse.x < controllRadius)
-            offset.x--;
-        if (mouse.x > 1 - controllRadius)
-            offset.x++;
-        if (mouse.y < controllRadius)
-            offset.z--;
-        if (mouse.y > 1 - controllRadius)
-            offset.z++;
-
-        var pos = target.transform.position + offset;
+        var pos = offset + target.transform.position;
         pos.x = Mathf.Clamp(pos.x, bounds.min.x, bounds.max.x);
         pos.z = Mathf.Clamp(pos.z, bounds.min.z, bounds.max.z);
         pos.y = startPos.y;
+        offset = pos - target.transform.position;
 
         transform.position = Vector3.Lerp(transform.position, pos, movePercent);
+    }
+
+    public void Move(Vector2 delta)
+    {
+        move += new Vector3(delta.x, 0, delta.y);
+    }
+
+    public void Move(float angle)
+    {
+        move += Quaternion.AngleAxis(angle, Vector3.down) * Vector3.forward;
     }
 }

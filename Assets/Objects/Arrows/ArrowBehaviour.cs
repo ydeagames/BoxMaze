@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ArrowBehaviour : MonoBehaviour
 {
@@ -22,8 +23,9 @@ public class ArrowBehaviour : MonoBehaviour
         var tileId = CubeBehaviour.GetSideId(CubeBehaviour.GetMoveRotation(direction, controller.player.transform.localRotation));
         arrowColor.material.color = FloorBehaviour.GetInstance().faces.GetFace(tileId).color;
 
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
-            if (hit.collider == col)
-                controller.Move(direction);
+        if (!EventSystem.current.IsPointerOverGameObject())
+            if (Input.GetMouseButtonDown(0) && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+                if (hit.collider == col)
+                    controller.Move(direction);
     }
 }
