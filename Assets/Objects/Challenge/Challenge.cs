@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -48,6 +49,7 @@ public class Challenge : MonoBehaviour
         ApplyChallenge();
     }
 
+    [ContextMenu("Goal")]
     public void Next()
     {
         if (TimeAttack.currentState == null)
@@ -77,6 +79,7 @@ public class Challenge : MonoBehaviour
         controller.Scene("GameScene");
     }
 
+    [ContextMenu("Finish")]
     public void Finished()
     {
         if (TimeAttack.currentState == null)
@@ -84,6 +87,16 @@ public class Challenge : MonoBehaviour
 
         TimeAttack.currentState.totalTime = TimeAttack.currentState.time;
         GameStats.currentStats.time = 0;
+
+        var ranking = Ranking.Load(TimeAttack.currentState.id) ?? new Ranking();
+        ranking.Add(new Ranking.RankingItem()
+        {
+            clearedCount = TimeAttack.currentState.clearedCount,
+            date = DateTime.Now,
+            totalMiss = TimeAttack.currentState.totalMiss,
+            totalCoin = TimeAttack.currentState.totalCoin,
+        });
+        Ranking.Save(TimeAttack.currentState.id, ranking);
 
         controller.Scene("RandomResultScene");
     }
