@@ -22,6 +22,12 @@ public class CustomStage : MonoBehaviour
             widthText.text = width.ToString();
             randomized = true;
         }
+        else if (width < 2)
+        {
+            width = 2;
+            widthText.text = width.ToString();
+            randomized = true;
+        }
         else if (width > 40)
         {
             width = 40;
@@ -31,6 +37,12 @@ public class CustomStage : MonoBehaviour
         if (!int.TryParse(heightText.text, out var height))
         {
             height = rnd.Next(27) + 3;
+            heightText.text = height.ToString();
+            randomized = true;
+        }
+        else if (height < 2)
+        {
+            height = 2;
             heightText.text = height.ToString();
             randomized = true;
         }
