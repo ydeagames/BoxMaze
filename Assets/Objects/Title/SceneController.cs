@@ -63,7 +63,18 @@ public class SceneController : MonoBehaviour
     public void Scene(string scene)
     {
         if (audioClip != null)
-            AudioSource.PlayClipAtPoint(audioClip, Vector3.zero);
+        {
+            var source = Camera.main.GetComponent<AudioSource>();
+            if (source != null)
+                source.PlayOneShot(audioClip);
+            else
+                AudioSource.PlayClipAtPoint(audioClip, Vector3.zero);
+        }
+        LoadScene(scene);
+    }
+
+    public void SceneNoSound(string scene)
+    {
         LoadScene(scene);
     }
 
@@ -93,7 +104,7 @@ public class SceneController : MonoBehaviour
     public void NextScene()
     {
         if (audioClip != null)
-            AudioSource.PlayClipAtPoint(audioClip, Vector3.zero);
+            Camera.main.GetComponent<AudioSource>().PlayOneShot(audioClip);
         StartGame(FloorBehaviour.currentSettings.id + 1);
     }
 

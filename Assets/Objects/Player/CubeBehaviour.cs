@@ -169,7 +169,7 @@ public class CubeBehaviour : MonoBehaviour
                 (Color diffuse, Color emission)=> { modelRenderer.materials[tileId].color = diffuse; modelRenderer.materials[tileId].SetColor("_EmissionColor", emission); },
             }, () => { }));
             GameStats.currentStats.miss++;
-            AudioSource.PlayClipAtPoint(audioMiss, Camera.main.transform.position);
+            Camera.main.GetComponent<AudioSource>().PlayOneShot(audioMiss);
         }
         else
         {
@@ -181,7 +181,7 @@ public class CubeBehaviour : MonoBehaviour
                 {
                     if (e.pos == nextPos)
                     {
-                        AudioSource.PlayClipAtPoint(audioCoin, Camera.main.transform.position);
+                        Camera.main.GetComponent<AudioSource>().PlayOneShot(audioCoin);
                         Destroy(e.obj);
                         GameStats.currentStats.coin++;
                     }

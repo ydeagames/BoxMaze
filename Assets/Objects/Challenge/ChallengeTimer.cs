@@ -19,7 +19,9 @@ public class ChallengeTimer : MonoBehaviour
             {
                 once = true;
                 if (challenge != null)
+                {
                     challenge.Finished();
+                }
             }
     }
 }

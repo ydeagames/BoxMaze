@@ -6,6 +6,7 @@ using UnityEngine;
 public class Challenge : MonoBehaviour
 {
     public SceneController controller;
+    public AudioClip audioFinished;
 
     private void Start()
     {
@@ -98,7 +99,8 @@ public class Challenge : MonoBehaviour
         });
         Ranking.Save(TimeAttack.currentState.id, ranking);
 
-        controller.Scene("RandomResultScene");
+        Camera.main.GetComponent<AudioSource>().PlayOneShot(audioFinished);
+        controller.SceneNoSound("RandomResultScene");
     }
 
     public bool HasPausedData()
