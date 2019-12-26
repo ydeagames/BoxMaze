@@ -1114,7 +1114,7 @@ MonoBehaviour:
   movePercent: 0.1
   floor: {fileID: 540232937}
   controllRadius: 0.1
-  controllSpeed: 0.1
+  controllSpeed: 10
 --- !u!1001 &1156760705
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1382,13 +1382,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1156858872}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.35241538, y: -0.50022477, z: 0.23325863, w: 0.75575733}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 50.000004, y: -67, z: 0}
 --- !u!1 &1230804221
 GameObject:
   m_ObjectHideFlags: 0

@@ -30,7 +30,7 @@ public class Targetter : MonoBehaviour
         bounds.Encapsulate(max);
 
         move = Quaternion.AngleAxis(camera.transform.eulerAngles.y, Vector3.up) * move;
-        move *= controllSpeed;
+        move *= controllSpeed * Time.deltaTime;
         offset += move;
         move = Vector3.zero;
 

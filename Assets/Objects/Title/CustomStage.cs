@@ -12,26 +12,36 @@ public class CustomStage : MonoBehaviour
 
     public void StartCustom()
     {
-        System.Random rnd = new System.Random();
+        var rnd = new System.Random();
 
-        bool randomized = false;
+        var randomized = false;
 
-        int width, height;
-        if (!int.TryParse(widthText.text, out width))
+        if (!int.TryParse(widthText.text, out var width))
         {
             width = rnd.Next(27) + 3;
             widthText.text = width.ToString();
             randomized = true;
         }
-        if (!int.TryParse(heightText.text, out height))
+        else if (width > 40)
+        {
+            width = 40;
+            widthText.text = width.ToString();
+            randomized = true;
+        }
+        if (!int.TryParse(heightText.text, out var height))
         {
             height = rnd.Next(27) + 3;
             heightText.text = height.ToString();
             randomized = true;
         }
+        else if (height > 40)
+        {
+            height = 40;
+            heightText.text = height.ToString();
+            randomized = true;
+        }
 
-        int seed;
-        if (!int.TryParse(seedText.text, out seed))
+        if (!int.TryParse(seedText.text, out var seed))
             if (!string.IsNullOrEmpty(seedText.text))
                 seed = seedText.GetHashCode();
             else
@@ -41,10 +51,10 @@ public class CustomStage : MonoBehaviour
                 randomized = true;
             }
 
-        if (!randomized)
-        {
-            FloorBehaviour.nextSettings = new FloorSettings(-1, seed, new Vector2Int(width, height));
-            controller.SceneAndAddLast();
-        }
+        if (randomized)
+            return;
+
+        FloorBehaviour.nextSettings = new FloorSettings(-1, seed, new Vector2Int(width, height));
+        controller.SceneAndAddLast();
     }
 }

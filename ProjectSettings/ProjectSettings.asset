@@ -307,17 +307,17 @@ PlayerSettings:
   openGLRequireES31: 0
   openGLRequireES31AEP: 0
   m_TemplateCustomTags:
-    HEADER_INJECTION: "<meta property=\"og:url\" content=\"https://ydeagames.github.io/FlipTheCat/\"
+    HEADER_INJECTION: "<meta property=\"og:url\" content=\"https://boxmaze.ydea.games/\"
       /> <meta property=\"og:type\" content=\"website\" /> <meta property=\"og:title\"
       content=\"\u7BB1\u30B3\u30ED\u308A\u3093 - \u3053\u308D\u304C\u3057\u30D1\u30BA\u30EB\u30B2\u30FC\u30E0\"
       /> <meta property=\"og:description\" content=\"\u9762\u306E\u8272\u3068\u5408\u3046\u8272\u306E\u30BF\u30A4\u30EB\u3092\u9032\u3081\u308B\u30D1\u30BA\u30EB\u30B2\u30FC\u30E0\u3067\u3059\"
       /> <meta property=\"og:site_name\" content=\"YdeaGames\" /> <meta property=\"og:image\"
-      content=\"https://i.gyazo.com/a94f9a6ae4f55ca43bd26858620b0579.png\" /> <meta
+      content=\"https://i.gyazo.com/db040f01d63ee24a401878d4dccd2b96.png\" /> <meta
       name=\"twitter:card\" content=\"\u7BB1\u30B3\u30ED\u308A\u3093\" /> <meta name=\"twitter:site\"
       content=\"@ydeagames\" /> <meta name=\"twitter:title\" content=\"\u7BB1\u30B3\u30ED\u308A\u3093
       - \u3053\u308D\u304C\u3057\u30D1\u30BA\u30EB\u30B2\u30FC\u30E0\" /> <meta name=\"twitter:description\"
       content=\"\u9762\u306E\u8272\u3068\u5408\u3046\u8272\u306E\u30BF\u30A4\u30EB\u3092\u9032\u3081\u308B\u30D1\u30BA\u30EB\u30B2\u30FC\u30E0\u3067\u3059\"
-      /> <meta name=\"twitter:image\" content=\"https://i.gyazo.com/a94f9a6ae4f55ca43bd26858620b0579.png\"
+      /> <meta name=\"twitter:image\" content=\"https://i.gyazo.com/db040f01d63ee24a401878d4dccd2b96.png\"
       />"
     HEAD_INJECTION: ' prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/ fb# website:
       http://ogp.me/ns/website#"'
