@@ -25,7 +25,10 @@ public class SceneController : MonoBehaviour
     public void SelectRandomOrHowTo()
     {
         if (PlayerPrefs.GetInt("howto.first") != 1)
+        {
+            lastSelect = "RandomSelectScene";
             HowToClicked();
+        }
         else
             Scene("RandomSelectScene");
     }
@@ -33,15 +36,29 @@ public class SceneController : MonoBehaviour
     public void SelectOrHowTo()
     {
         if (PlayerPrefs.GetInt("howto.first") != 1)
+        {
+            lastSelect = "SelectScene";
             HowToClicked();
+        }
         else
             Scene("SelectScene");
+    }
+
+    public void HowTo()
+    {
+        lastSelect = "RandomSelectScene";
+        HowToClicked();
     }
 
     public void HowToClicked()
     {
         Scene("HowToScene");
         PlayerPrefs.SetInt("howto.first", 1);
+    }
+
+    public void HowToStart()
+    {
+        Scene(lastSelect);
     }
 
     public void SceneClicked()
@@ -80,11 +97,11 @@ public class SceneController : MonoBehaviour
 
     public void ClearGame()
     {
-        var before = GameStats.Load(FloorBehaviour.currentSettings.id);
+        var before = GameStats.Load(FloorBehaviour.currentSettings.Value.id);
         GameStats.currentStats.cleared = true;
         var stats = new GameStats(GameStats.currentStats);
         stats.coin = System.Math.Max(stats.coin, before.coin);
-        GameStats.Save(FloorBehaviour.currentSettings.id, stats);
+        GameStats.Save(FloorBehaviour.currentSettings.Value.id, stats);
         Scene("ResultScene");
     }
 
@@ -105,7 +122,7 @@ public class SceneController : MonoBehaviour
     {
         if (audioClip != null)
             Camera.main.GetComponent<AudioSource>().PlayOneShot(audioClip);
-        StartGame(FloorBehaviour.currentSettings.id + 1);
+        StartGame(FloorBehaviour.currentSettings.Value.id + 1);
     }
 
     public static void LoadScene(string scene)

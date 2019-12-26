@@ -74,10 +74,11 @@ public class Challenge : MonoBehaviour
         var rnd = new System.Random(TimeAttack.currentState.seed);
         int sizebase = 4;
         int sizeex = TimeAttack.currentState.difficulty * 8 + TimeAttack.currentState.clearedCount;
-        FloorBehaviour.nextSettings = TimeAttack.currentState.currentStage =
+        TimeAttack.currentState.currentStage =
             new FloorSettings(TimeAttack.currentState.id, TimeAttack.currentState.seed, new Vector2Int(sizebase + rnd.Next(0, sizeex), sizebase + rnd.Next(0, sizeex)));
 
-        controller.Scene("GameScene");
+        TimeAttack.Save(TimeAttack.currentState);
+        ContinuePause();
     }
 
     [ContextMenu("Finish")]
@@ -110,7 +111,9 @@ public class Challenge : MonoBehaviour
 
     public void ContinuePause()
     {
+        TimeAttack.currentState = TimeAttack.Load();
         FloorBehaviour.nextSettings = TimeAttack.currentState.currentStage;
+        SceneController.lastSelect = "TitleScene";
         controller.Scene("GameScene");
     }
 }

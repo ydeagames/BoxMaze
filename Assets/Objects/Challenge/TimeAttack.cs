@@ -13,7 +13,7 @@ public class TimeAttack
     public float totalTime;
     public int totalCoin;
     public int totalMiss;
-    public FloorSettings currentStage;
+    public FloorSettings? currentStage;
 
     public static TimeAttack currentState = null;
     public static void Reset()
@@ -53,12 +53,12 @@ public class TimeAttack
 
             if (stats.currentStage != null)
             {
-                PlayerPrefs.SetInt($"challenge.stage.id", stats.currentStage.id);
-                PlayerPrefs.SetInt($"challenge.stage.size.x", stats.currentStage.size.x);
-                PlayerPrefs.SetInt($"challenge.stage.size.y", stats.currentStage.size.y);
-                PlayerPrefs.SetInt($"challenge.seed", stats.currentStage.seed);
-                PlayerPrefs.SetInt($"challenge.spawn.x", stats.currentStage.spawn.x);
-                PlayerPrefs.SetInt($"challenge.spawn.y", stats.currentStage.spawn.y);
+                PlayerPrefs.SetInt($"challenge.stage.id", stats.currentStage.Value.id);
+                PlayerPrefs.SetInt($"challenge.stage.size.x", stats.currentStage.Value.size.x);
+                PlayerPrefs.SetInt($"challenge.stage.size.y", stats.currentStage.Value.size.y);
+                PlayerPrefs.SetInt($"challenge.seed", stats.currentStage.Value.seed);
+                PlayerPrefs.SetInt($"challenge.spawn.x", stats.currentStage.Value.spawn.x);
+                PlayerPrefs.SetInt($"challenge.spawn.y", stats.currentStage.Value.spawn.y);
             }
             else
             {

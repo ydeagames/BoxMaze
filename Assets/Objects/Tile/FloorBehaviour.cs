@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 [System.Serializable]
-public class FloorSettings
+public struct FloorSettings
 {
     public int id;
     public Vector2Int size;
@@ -51,8 +51,8 @@ public class FloorBehaviour : MonoBehaviour
         }
     }
     public List<Coin> coins = new List<Coin>();
-    public static FloorSettings nextSettings;
-    public static FloorSettings currentSettings;
+    public static FloorSettings? nextSettings;
+    public static FloorSettings? currentSettings;
     public FloorSettings settings;
 
     // Start is called before the first frame update
@@ -61,14 +61,14 @@ public class FloorBehaviour : MonoBehaviour
         GameStats.Reset();
         if (nextSettings != null)
         {
-            settings = nextSettings;
+            settings = nextSettings.Value;
             currentSettings = nextSettings;
             nextSettings = null;
         }
         else
         {
             if (currentSettings != null)
-                settings = currentSettings;
+                settings = currentSettings.Value;
             else
                 settings = new FloorSettings(-1, new Vector2Int(10, 10));
         }
