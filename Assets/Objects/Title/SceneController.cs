@@ -118,11 +118,24 @@ public class SceneController : MonoBehaviour
         Scene("GameScene");
     }
 
+    public void StartGame0(int id)
+    {
+        TimeAttack.Reset();
+        TimeAttack.Save(TimeAttack.currentState);
+
+        System.Random rnd = new System.Random(id);
+        int sizebase = 4;
+        int sizeex = (id % 8) * (id / 8) / 2;
+        FloorBehaviour.nextSettings = new FloorSettings(id, id, new Vector2Int(sizebase + rnd.Next(0, sizeex), sizebase + rnd.Next(0, sizeex)));
+        Scene("GameScene");
+    }
+
     public void NextScene()
     {
         if (audioClip != null)
             Camera.main.GetComponent<AudioSource>().PlayOneShot(audioClip);
-        StartGame(FloorBehaviour.currentSettings.Value.id + 1);
+        lastSelect = "SelectScene";
+        StartGame0(FloorBehaviour.currentSettings.Value.id + 1);
     }
 
     public static void LoadScene(string scene)
